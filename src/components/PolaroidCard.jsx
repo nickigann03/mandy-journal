@@ -77,9 +77,11 @@ const PolaroidCard = ({ id, defaultPosition, imageSrc, caption, creatorName, cre
         }}
       >
         <CreatorTag name={creatorName} avatar={creatorAvatar} />
-        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Photo">
-          <X size={14} />
-        </button>
+        {onDelete && (
+          <button className="delete-btn" onClick={() => onDelete(id)} title="Delete Photo">
+            <X size={14} />
+          </button>
+        )}
         <div className="note-toolbar" style={{ right: '40px' }}>
           <button 
             onClick={() => {

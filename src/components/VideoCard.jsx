@@ -122,9 +122,11 @@ const VideoCard = ({ id, defaultPosition, title, creatorName, creatorAvatar, wid
         }}
       >
         <CreatorTag name={creatorName} avatar={creatorAvatar} />
-        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Video Note">
-          <X size={14} />
-        </button>
+        {onDelete && (
+          <button className="delete-btn" onClick={() => onDelete(id)} title="Delete Video Note">
+            <X size={14} />
+          </button>
+        )}
         <div className="note-toolbar" style={{ right: '40px' }}>
           <button 
             onClick={() => {

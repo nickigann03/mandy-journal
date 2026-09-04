@@ -78,9 +78,11 @@ const AudioCard = ({ id, defaultPosition, title, creatorName, creatorAvatar, col
         style={{ transform: `rotate(${rotation}deg)` }}
       >
         <CreatorTag name={creatorName} avatar={creatorAvatar} />
-        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Audio Note">
-          <X size={14} />
-        </button>
+        {onDelete && (
+          <button className="delete-btn" onClick={() => onDelete(id)} title="Delete Audio Note">
+            <X size={14} />
+          </button>
+        )}
         <div className="note-toolbar" style={{ right: '40px' }}>
           <button onClick={() => setShowPalette(!showPalette)}><Palette size={14} /></button>
         </div>

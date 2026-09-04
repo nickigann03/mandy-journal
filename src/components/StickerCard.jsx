@@ -14,9 +14,11 @@ const StickerCard = ({ id, defaultPosition, imageSrc, creatorName, creatorAvatar
     <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="button" onStop={handleStop}>
       <div ref={nodeRef} className="board-item drag-handle" style={{ background: 'none', boxShadow: 'none', padding: 0, transform: `rotate(${rotation}deg)` }}>
         <div style={{ position: 'relative' }}>
-          <button className="delete-btn" onClick={() => onDelete && onDelete(id)} style={{ top: 0, right: 0 }} title="Remove Sticker">
-            <X size={14} />
-          </button>
+          {onDelete && (
+            <button className="delete-btn" onClick={() => onDelete(id)} style={{ top: 0, right: 0 }} title="Remove Sticker">
+              <X size={14} />
+            </button>
+          )}
         </div>
         <img src={imageSrc} alt="sticker" draggable="false" className="sticker-img" />
       </div>

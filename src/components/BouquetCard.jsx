@@ -33,9 +33,11 @@ const BouquetCard = ({ id, defaultPosition, imageSrc = bouquetImg, creatorName, 
       <div ref={nodeRef} className="board-item drag-handle bouquet-card" style={{ background: 'none', boxShadow: 'none', padding: 0, transform: `rotate(${rotation}deg)` }}>
         <div style={{ position: 'relative' }}>
           <CreatorTag name={creatorName} avatar={creatorAvatar} />
-          <button className="delete-btn" onClick={() => onDelete && onDelete(id)} style={{ top: 0, right: 0, zIndex: 10 }} title="Delete">
+        {onDelete && (
+          <button className="delete-btn" onClick={() => onDelete(id)} style={{ top: 0, right: 0, zIndex: 10 }} title="Delete">
             <X size={14} />
           </button>
+        )}
         </div>
 
         <div className="bouquet-container" onClick={triggerAnimation}>

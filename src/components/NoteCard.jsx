@@ -38,9 +38,11 @@ const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color =
         style={{ transform: `rotate(${rotation}deg)` }}
       >
         <CreatorTag name={creatorName} avatar={creatorAvatar} />
-        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Note">
-          <X size={14} />
-        </button>
+        {onDelete && (
+          <button className="delete-btn" onClick={() => onDelete(id)} title="Delete Note">
+            <X size={14} />
+          </button>
+        )}
         <div className="note-toolbar">
           <button onClick={() => setFontSize(Math.max(1, fontSize - 0.2))}><Minus size={14} /></button>
           <button onClick={() => setFontSize(Math.min(4, fontSize + 0.2))}><Plus size={14} /></button>

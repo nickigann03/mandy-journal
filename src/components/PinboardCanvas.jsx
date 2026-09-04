@@ -162,9 +162,11 @@ const PinboardCanvas = ({ currentUser }) => {
           Dearest Mandy,
         </div>
         {items.map(item => {
+          const canDelete = !item.creatorName || (currentUser && item.creatorName === currentUser.name);
           const commonProps = {
             id: item._id, defaultPosition: item.position,
-            onUpdatePosition: handleUpdatePosition, onDelete: handleDelete,
+            onUpdatePosition: handleUpdatePosition, 
+            onDelete: canDelete ? handleDelete : null,
             creatorName: item.creatorName, creatorAvatar: item.creatorAvatar
           };
 

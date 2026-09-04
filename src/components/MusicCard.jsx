@@ -50,9 +50,11 @@ const MusicCard = ({ id, defaultPosition, url, creatorName, creatorAvatar, onUpd
     <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, button, iframe" onStop={handleStop}>
       <div ref={nodeRef} className="board-item drag-handle music-card" style={{ transform: `rotate(${rotation}deg)` }}>
         <CreatorTag name={creatorName} avatar={creatorAvatar} />
-        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Music">
-          <X size={14} />
-        </button>
+        {onDelete && (
+          <button className="delete-btn" onClick={() => onDelete(id)} title="Delete Music">
+            <X size={14} />
+          </button>
+        )}
 
         {isEditing ? (
           <div className="music-editor">

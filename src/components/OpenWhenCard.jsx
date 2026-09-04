@@ -32,9 +32,11 @@ const OpenWhenCard = ({ id, defaultPosition, prompt = "you're sad", text = "", i
     <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, textarea, button, .flap" onStop={handleStop}>
       <div ref={nodeRef} className={`board-item drag-handle open-when-card ${opened ? 'is-open' : 'is-closed'} color-${color}`} style={{ transform: `rotate(${rotation}deg)` }}>
         <CreatorTag name={creatorName} avatar={creatorAvatar} />
-        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete">
-          <X size={14} />
-        </button>
+        {onDelete && (
+          <button className="delete-btn" onClick={() => onDelete(id)} title="Delete">
+            <X size={14} />
+          </button>
+        )}
 
         {!opened ? (
           <div className="envelope-closed interactive" onClick={toggleOpen}>
