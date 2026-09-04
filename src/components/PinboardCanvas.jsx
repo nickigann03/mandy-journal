@@ -112,7 +112,7 @@ const PinboardCanvas = () => {
     <div className="pinboard-wrapper" ref={wrapperRef}>
       <div className="pinboard-canvas">
         <div className="board-title" style={{ position: 'absolute', top: 20, left: '50%', transform: 'translateX(-50%)', fontSize: '2.5rem', opacity: 0.8 }}>
-          .Dear Mandy
+          Dearest Mandy,
         </div>
         {items.map(item => {
           if (item.type === 'note') {
