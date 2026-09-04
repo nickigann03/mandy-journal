@@ -164,34 +164,34 @@ const PinboardCanvas = ({ currentUser }) => {
         </div>
         {items.map(item => {
           const commonProps = {
-            key: item._id, id: item._id, defaultPosition: item.position,
+            id: item._id, defaultPosition: item.position,
             onUpdatePosition: handleUpdatePosition, onDelete: handleDelete,
             creatorName: item.creatorName, creatorAvatar: item.creatorAvatar
           };
 
           if (item.type === 'note') {
-             return <NoteCard {...commonProps} onUpdateContent={handleUpdateContent} text={item.text} author={item.author} shape={item.shape} color={item.color} hasPushpin={item.hasPushpin} />;
+             return <NoteCard key={item._id} {...commonProps} onUpdateContent={handleUpdateContent} text={item.text} author={item.author} shape={item.shape} color={item.color} hasPushpin={item.hasPushpin} />;
           }
           if (item.type === 'polaroid') {
-            return <PolaroidCard {...commonProps} onUpdateContent={handleUpdateContent} imageSrc={item.imageSrc} caption={item.caption} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
+            return <PolaroidCard key={item._id} {...commonProps} onUpdateContent={handleUpdateContent} imageSrc={item.imageSrc} caption={item.caption} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
           }
           if (item.type === 'audio') {
-            return <AudioCard {...commonProps} onUpdateContent={handleUpdateContent} title={item.title} />;
+            return <AudioCard key={item._id} {...commonProps} onUpdateContent={handleUpdateContent} title={item.title} />;
           }
           if (item.type === 'video') {
-            return <VideoCard {...commonProps} onUpdateContent={handleUpdateContent} title={item.title} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
+            return <VideoCard key={item._id} {...commonProps} onUpdateContent={handleUpdateContent} title={item.title} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
           }
           if (item.type === 'sticker') {
-            return <StickerCard {...commonProps} imageSrc={item.imageSrc} />;
+            return <StickerCard key={item._id} {...commonProps} imageSrc={item.imageSrc} />;
           }
           if (item.type === 'open_when') {
-            return <OpenWhenCard {...commonProps} onUpdateContent={handleUpdateContent} prompt={item.prompt} text={item.text} isOpen={item.isOpen} color={item.color} />;
+            return <OpenWhenCard key={item._id} {...commonProps} onUpdateContent={handleUpdateContent} prompt={item.prompt} text={item.text} isOpen={item.isOpen} color={item.color} />;
           }
           if (item.type === 'music') {
-            return <MusicCard {...commonProps} onUpdateContent={handleUpdateContent} url={item.url} />;
+            return <MusicCard key={item._id} {...commonProps} onUpdateContent={handleUpdateContent} url={item.url} />;
           }
           if (item.type === 'bouquet') {
-            return <BouquetCard {...commonProps} imageSrc={item.imageSrc} />;
+            return <BouquetCard key={item._id} {...commonProps} imageSrc={item.imageSrc} />;
           }
           return null;
         })}

@@ -1,8 +1,9 @@
 import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
 import { Upload, X, Maximize, Frame } from 'lucide-react';
+import CreatorTag from './CreatorTag';
 
-const PolaroidCard = ({ id, defaultPosition, imageSrc, caption, width = 240, height = 300, hasFrame = true, onUpdatePosition, onUpdateContent, onDelete }) => {
+const PolaroidCard = ({ id, defaultPosition, imageSrc, caption, creatorName, creatorAvatar, width = 240, height = 300, hasFrame = true, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [currentImage, setCurrentImage] = useState(imageSrc || '');
   const [currentCaption, setCurrentCaption] = useState(caption || '');

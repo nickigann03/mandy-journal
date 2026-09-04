@@ -1,8 +1,9 @@
 import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
 import { Play, Square, Disc, Mic, Square as StopSquare, X, Palette } from 'lucide-react';
+import CreatorTag from './CreatorTag';
 
-const AudioCard = ({ id, defaultPosition, title, color = 'white', onUpdatePosition, onUpdateContent, onDelete }) => {
+const AudioCard = ({ id, defaultPosition, title, creatorName, creatorAvatar, color = 'white', onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useMemo, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import { Video, Square as StopSquare, X, Frame } from 'lucide-react';
+import CreatorTag from './CreatorTag';
 
 const VideoCard = ({ id, defaultPosition, title, width = 240, height = 300, hasFrame = true, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
