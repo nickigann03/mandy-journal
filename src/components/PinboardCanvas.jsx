@@ -242,14 +242,14 @@ const PinboardCanvas = ({ currentUser }) => {
         )}
         
         {mediaPickerType && (
-          <div className="sticker-picker" style={{ gridTemplateColumns: '1fr 1fr', width: '180px', gap: '12px' }}>
-            <button className="note-option shape-square color-white" onClick={() => addItem(mediaPickerType, { hasFrame: true })} title="With Classic Frame" style={{ padding: '8px' }}>
-              {mediaPickerType === 'polaroid' ? <ImageIcon size={28} color="#555" style={{ margin: '0 auto' }} /> : <VideoIcon size={28} color="#555" style={{ margin: '0 auto' }} />}
-              <div style={{ fontSize: '0.85rem', marginTop: '6px', color: '#555', fontFamily: 'var(--font-ui)', fontWeight: 600 }}>Framed</div>
+          <div className="sticker-picker" style={{ gridTemplateColumns: '1fr 1fr', width: 'max-content', gap: '12px' }}>
+            <button onClick={() => addItem(mediaPickerType, { hasFrame: true })} title="With Classic Frame" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px 15px', border: '2px solid var(--text-primary)', borderRadius: '12px', background: 'white', cursor: 'pointer' }}>
+              {mediaPickerType === 'polaroid' ? <ImageIcon size={28} color="#555" /> : <VideoIcon size={28} color="#555" />}
+              <div style={{ fontSize: '0.85rem', marginTop: '6px', color: '#555', fontFamily: 'var(--font-ui)', fontWeight: 700 }}>Framed</div>
             </button>
-            <button className="note-option shape-square color-white" style={{ border: '2px dashed #ccc', padding: '8px' }} onClick={() => addItem(mediaPickerType, { hasFrame: false })} title="Frameless, Edge-to-Edge">
-              {mediaPickerType === 'polaroid' ? <ImageIcon size={28} color="#aaa" style={{ margin: '0 auto' }} /> : <VideoIcon size={28} color="#aaa" style={{ margin: '0 auto' }} />}
-              <div style={{ fontSize: '0.85rem', marginTop: '6px', color: '#888', fontFamily: 'var(--font-ui)', fontWeight: 600 }}>Frameless</div>
+            <button onClick={() => addItem(mediaPickerType, { hasFrame: false })} title="Frameless, Edge-to-Edge" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '10px 15px', border: '2px dashed #aaa', borderRadius: '12px', background: '#fdfdfd', cursor: 'pointer' }}>
+              {mediaPickerType === 'polaroid' ? <ImageIcon size={28} color="#888" /> : <VideoIcon size={28} color="#888" />}
+              <div style={{ fontSize: '0.85rem', marginTop: '6px', color: '#888', fontFamily: 'var(--font-ui)', fontWeight: 700 }}>Frameless</div>
             </button>
           </div>
         )}
