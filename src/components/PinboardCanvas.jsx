@@ -137,21 +137,31 @@ const PinboardCanvas = ({ currentUser }) => {
       
       {showMobileWarning && (
         <div style={{
-          position: 'fixed', top: 0, left: 0, width: '100%', 
-          background: '#ff6b6b', color: 'white', padding: '12px 20px',
-          zIndex: 10001, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          fontFamily: "'Quicksand', sans-serif", fontWeight: '600', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+          background: 'rgba(255, 218, 224, 0.6)', backdropFilter: 'blur(8px)',
+          zIndex: 10001, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: "'Quicksand', sans-serif"
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '1.2rem' }}>📱</span>
-            <span style={{ fontSize: '0.95rem' }}>This is best viewed on a larger screen! You can scroll around for now.</span>
+          <div style={{
+            background: 'white', padding: '30px 20px', borderRadius: '20px',
+            textAlign: 'center', maxWidth: '320px', border: '3px solid var(--text-primary)',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+          }}>
+            <span style={{ fontSize: '3rem', display: 'block', marginBottom: '10px', lineHeight: 1 }}>📱</span>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '10px', color: 'var(--text-primary)' }}>Larger Screen Recommended</h2>
+            <p style={{ fontSize: '1.1rem', color: '#555', marginBottom: '20px', fontWeight: '600', lineHeight: 1.4 }}>
+              This is best viewed on a laptop or iPad! You can still scroll around for now, but things might be a bit cramped.
+            </p>
+            <button 
+              onClick={(e) => { e.stopPropagation(); setShowMobileWarning(false); }}
+              style={{
+                width: '100%', padding: '12px', background: 'var(--text-primary)', color: 'white',
+                border: 'none', borderRadius: '12px', fontSize: '1.1rem', fontWeight: '700', cursor: 'pointer'
+              }}
+            >
+              Got it, continue
+            </button>
           </div>
-          <button 
-            onClick={(e) => { e.stopPropagation(); setShowMobileWarning(false); }}
-            style={{ background: 'rgba(255,255,255,0.2)', border: 'none', color: 'white', width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <X size={16} />
-          </button>
         </div>
       )}
 
