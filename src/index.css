@@ -741,7 +741,11 @@ body {
   position: relative; cursor: pointer; transition: transform 0.2s; display: inline-block;
 }
 .bouquet-container:hover { transform: scale(1.05); }
-.bouquet-img { width: 100%; object-fit: contain; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)); }
+.bouquet-img { 
+  width: 100%; object-fit: contain; 
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)); 
+  mix-blend-mode: multiply; /* Removes white background */
+}
 .click-me-hint {
   position: absolute; bottom: 30%; left: 50%; transform: translateX(-50%) rotate(-10deg);
   background: rgba(255,255,255,0.9); padding: 4px 12px; border-radius: 20px;

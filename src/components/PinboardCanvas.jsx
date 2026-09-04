@@ -9,6 +9,8 @@ import MusicCard from './MusicCard';
 import BouquetCard from './BouquetCard';
 import { Plus, Type, Image as ImageIcon, Mic, Video as VideoIcon, Sparkles, X, Mail, Music, Gift } from 'lucide-react';
 
+import bouquetImg from '../assets/stickers/bouquet.jpg';
+import bouquetPinkImg from '../assets/stickers/bouquet_pink.jpg';
 import catImg from '../assets/stickers/cat.png';
 import sunImg from '../assets/stickers/sun.png';
 import rainbowImg from '../assets/stickers/rainbow.png';
@@ -20,6 +22,7 @@ import starImg from '../assets/stickers/star.png';
 import heartImg from '../assets/stickers/heart.png';
 
 const stickers = [catImg, sunImg, rainbowImg, dogImg, cactusImg, pizzaImg, flowerImg, starImg, heartImg];
+const bouquetOptions = [bouquetImg, bouquetPinkImg, flowerImg];
 const noteColors = ['white', 'yellow', 'pink', 'blue', 'green'];
 const noteShapes = ['square', 'circle', 'scallop'];
 
@@ -37,6 +40,7 @@ const PinboardCanvas = () => {
   const [showStickerPicker, setShowStickerPicker] = useState(false);
   const [showNotePicker, setShowNotePicker] = useState(false);
   const [showEnvelopePicker, setShowEnvelopePicker] = useState(false);
+  const [showBouquetPicker, setShowBouquetPicker] = useState(false);
   const [mediaPickerType, setMediaPickerType] = useState(null); // 'polaroid' or 'video'
   const wrapperRef = useRef(null);
 
@@ -116,13 +120,16 @@ const PinboardCanvas = () => {
       newItem.position.y += 100;
     } else if (type === 'open_when') {
       newItem.color = options?.color || 'white';
+    } else if (type === 'bouquet') {
+      newItem.imageSrc = options;
     }
 
     addItemMutation(newItem);
-    if (type !== 'sticker' && type !== 'note' && type !== 'polaroid' && type !== 'video' && type !== 'open_when') setMenuOpen(false); 
+    if (type !== 'sticker' && type !== 'note' && type !== 'polaroid' && type !== 'video' && type !== 'open_when' && type !== 'bouquet') setMenuOpen(false); 
     setShowStickerPicker(false);
     setShowNotePicker(false);
     setShowEnvelopePicker(false);
+    setShowBouquetPicker(false);
     setMediaPickerType(null);
   };
 
@@ -167,7 +174,7 @@ const PinboardCanvas = () => {
             return <MusicCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} url={item.url} />;
           }
           if (item.type === 'bouquet') {
-            return <BouquetCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onDelete={handleDelete} />;
+            return <BouquetCard key={item._id} id={item._id} defaultPosition={item.position} imageSrc={item.imageSrc} onUpdatePosition={handleUpdatePosition} onDelete={handleDelete} />;
           }
           return null;
         })}
@@ -206,6 +213,16 @@ const PinboardCanvas = () => {
             ))}
           </div>
         )}
+
+        {showBouquetPicker && (
+          <div className="sticker-picker" style={{ gridTemplateColumns: 'repeat(3, 1fr)', width: '180px' }}>
+            {bouquetOptions.map((src, i) => (
+              <button key={`bouquet-${i}`} className="sticker-option" style={{ padding: '4px' }} onClick={() => addItem('bouquet', src)}>
+                <img src={src} alt={`bouquet ${i}`} style={{ mixBlendMode: 'multiply' }} />
+              </button>
+            ))}
+          </div>
+        )}
         
         {mediaPickerType && (
           <div className="sticker-picker" style={{ gridTemplateColumns: '1fr 1fr', width: '180px', gap: '12px' }}>
@@ -220,7 +237,7 @@ const PinboardCanvas = () => {
           </div>
         )}
         
-        {menuOpen && !showStickerPicker && !showNotePicker && !showEnvelopePicker && !mediaPickerType && (
+        {menuOpen && !showStickerPicker && !showNotePicker && !showEnvelopePicker && !showBouquetPicker && !mediaPickerType && (
           <div className="fab-menu">
             <button onClick={() => setShowNotePicker(true)} title="Add Note"><Type size={20} /></button>
             <button onClick={() => setMediaPickerType('polaroid')} title="Add Photo"><ImageIcon size={20} /></button>
@@ -229,20 +246,21 @@ const PinboardCanvas = () => {
             <button onClick={() => setShowStickerPicker(true)} title="Add Cute Sticker"><Sparkles size={20} /></button>
             <button onClick={() => setShowEnvelopePicker(true)} title="Add Open When Envelope"><Mail size={20} /></button>
             <button onClick={() => addItem('music')} title="Add Spotify/YouTube Music"><Music size={20} /></button>
-            <button onClick={() => addItem('bouquet')} title="Add Virtual Bouquet"><Gift size={20} /></button>
+            <button onClick={() => setShowBouquetPicker(true)} title="Add Virtual Bouquet"><Gift size={20} /></button>
           </div>
         )}
         <button className="fab-main" onClick={() => {
-          if (showStickerPicker || showNotePicker || showEnvelopePicker || mediaPickerType) {
+          if (showStickerPicker || showNotePicker || showEnvelopePicker || showBouquetPicker || mediaPickerType) {
             setShowStickerPicker(false);
             setShowNotePicker(false);
             setShowEnvelopePicker(false);
+            setShowBouquetPicker(false);
             setMediaPickerType(null);
           } else {
             setMenuOpen(!menuOpen);
           }
         }}>
-          <Plus size={28} className={menuOpen || showStickerPicker || showNotePicker || showEnvelopePicker || mediaPickerType ? 'rotate' : ''} />
+          <Plus size={28} className={menuOpen || showStickerPicker || showNotePicker || showEnvelopePicker || showBouquetPicker || mediaPickerType ? 'rotate' : ''} />
         </button>
       </div>
     </div>

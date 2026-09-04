@@ -3,7 +3,7 @@ import Draggable from 'react-draggable';
 import { X } from 'lucide-react';
 import bouquetImg from '../assets/stickers/bouquet.jpg';
 
-const BouquetCard = ({ id, defaultPosition, onUpdatePosition, onDelete }) => {
+const BouquetCard = ({ id, defaultPosition, imageSrc = bouquetImg, onUpdatePosition, onDelete }) => {
   const nodeRef = useRef(null);
   const [animating, setAnimating] = useState(false);
   const rotation = useMemo(() => Math.random() * 8 - 4, []);
@@ -39,7 +39,7 @@ const BouquetCard = ({ id, defaultPosition, onUpdatePosition, onDelete }) => {
         </button>
 
         <div className="bouquet-container" onClick={triggerAnimation}>
-          <img src={bouquetImg} alt="Virtual Bouquet" className="bouquet-img" />
+          <img src={imageSrc} alt="Virtual Bouquet" className="bouquet-img" />
           
           {animating && (
             <div className="petals-container">
