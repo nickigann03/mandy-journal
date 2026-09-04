@@ -148,15 +148,15 @@ body {
 .color-blue { background-color: #e3f2fd; }
 .color-green { background-color: #e8f5e9; }
 
-/* Note Shapes */
-.shape-square { border-radius: 4px; }
-.shape-circle { 
+/* Note Shapes for the board */
+.note-card.shape-square { border-radius: 4px; }
+.note-card.shape-circle { 
   border-radius: 50%; 
   width: 300px; height: 300px;
   display: flex; flex-direction: column; justify-content: center; align-items: center;
   padding: 40px;
 }
-.shape-scallop {
+.note-card.shape-scallop {
   border-radius: 12px;
   background-image: radial-gradient(circle at 10px 0, transparent 10px, inherit 11px);
   background-size: 20px 20px;
