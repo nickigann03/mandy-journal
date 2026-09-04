@@ -44,7 +44,8 @@ const UserSetupModal = ({ onComplete }) => {
   return (
     <div className="modal-overlay">
       <div className="user-setup-modal">
-        <h2>Who's adding memories? 📌</h2>
+        <div style={{ fontSize: '2.5rem', marginBottom: '10px', lineHeight: 1 }}>📌</div>
+        <h2>Who's adding memories?</h2>
         
         {!showNewForm && savedUsers.length > 0 ? (
           <div className="saved-users-list">
