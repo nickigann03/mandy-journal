@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import { Minus, Plus, Type, X } from 'lucide-react';
 
@@ -13,6 +13,15 @@ const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color =
   
   const rotation = useMemo(() => Math.random() * 6 - 3, []);
   const tapeColor = useMemo(() => ['washi-pink', 'washi-blue', 'washi-green'][Math.floor(Math.random() * 3)], []);
+
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  }, [currentText, fontSize, fontIndex]);
 
   const handleStop = (e, data) => {
     if (onUpdatePosition) {
@@ -44,6 +53,7 @@ const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color =
         
         <div className="note-content" style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center' }}>
           <textarea 
+            ref={textareaRef}
             value={currentText} 
             onChange={(e) => setCurrentText(e.target.value)} 
             onBlur={() => onUpdateContent && onUpdateContent(id, { text: currentText, author: currentAuthor })}
