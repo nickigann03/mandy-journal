@@ -9,8 +9,8 @@ import MusicCard from './MusicCard';
 import BouquetCard from './BouquetCard';
 import { Plus, Type, Image as ImageIcon, Mic, Video as VideoIcon, Sparkles, X, Mail, Music, Gift } from 'lucide-react';
 
-import bouquetImg from '../assets/stickers/bouquet.jpg';
-import bouquetPinkImg from '../assets/stickers/bouquet_pink.jpg';
+import bouquetImg from '../assets/stickers/bouquet.png';
+import bouquetPinkImg from '../assets/stickers/bouquet_pink.png';
 import catImg from '../assets/stickers/cat.png';
 import sunImg from '../assets/stickers/sun.png';
 import rainbowImg from '../assets/stickers/rainbow.png';

@@ -1,7 +1,7 @@
 import React, { useRef, useMemo, useState } from 'react';
 import Draggable from 'react-draggable';
 import { X } from 'lucide-react';
-import bouquetImg from '../assets/stickers/bouquet.jpg';
+import bouquetImg from '../assets/stickers/bouquet.png';
 import CreatorTag from './CreatorTag';
 
 const BouquetCard = ({ id, defaultPosition, imageSrc = bouquetImg, creatorName, creatorAvatar, onUpdatePosition, onDelete }) => {
