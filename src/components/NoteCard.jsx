@@ -1,8 +1,8 @@
 import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
-import { Minus, Plus, Type } from 'lucide-react';
+import { Minus, Plus, Type, X } from 'lucide-react';
 
-const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color = 'white', hasPushpin = false, onUpdatePosition, onUpdateContent }) => {
+const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color = 'white', hasPushpin = false, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [currentText, setCurrentText] = useState(text || '');
   const [currentAuthor, setCurrentAuthor] = useState(author || '');
@@ -27,6 +27,9 @@ const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color =
         className={`board-item note-card drag-handle shape-${shape} color-${color}`} 
         style={{ transform: `rotate(${rotation}deg)` }}
       >
+        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Note">
+          <X size={14} />
+        </button>
         <div className="note-toolbar">
           <button onClick={() => setFontSize(Math.max(1, fontSize - 0.2))}><Minus size={14} /></button>
           <button onClick={() => setFontSize(Math.min(4, fontSize + 0.2))}><Plus size={14} /></button>

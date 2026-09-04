@@ -1,8 +1,8 @@
 import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
-import { Upload } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
 
-const PolaroidCard = ({ id, defaultPosition, imageSrc, caption, onUpdatePosition, onUpdateContent }) => {
+const PolaroidCard = ({ id, defaultPosition, imageSrc, caption, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [currentImage, setCurrentImage] = useState(imageSrc || '');
   const [currentCaption, setCurrentCaption] = useState(caption || '');
@@ -33,6 +33,9 @@ const PolaroidCard = ({ id, defaultPosition, imageSrc, caption, onUpdatePosition
         className="board-item polaroid-card drag-handle"
         style={{ transform: `rotate(${rotation}deg)` }}
       >
+        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Photo">
+          <X size={14} />
+        </button>
         <div className={`washi-tape ${tapeColor}`}></div>
         <div className="photo-container" onClick={() => !currentImage && fileInputRef.current.click()}>
           {currentImage ? (

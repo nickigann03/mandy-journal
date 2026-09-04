@@ -1,8 +1,8 @@
 import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
-import { Play, Square, Disc, Mic, Square as StopSquare } from 'lucide-react';
+import { Play, Square, Disc, Mic, Square as StopSquare, X } from 'lucide-react';
 
-const AudioCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateContent }) => {
+const AudioCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
@@ -72,6 +72,9 @@ const AudioCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateConte
         className="board-item media-card drag-handle"
         style={{ transform: `rotate(${rotation}deg)` }}
       >
+        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Audio Note">
+          <X size={14} />
+        </button>
         <div className={`washi-tape ${tapeColor}`}></div>
         <div className="audio-header">
           <Disc className={`disc-icon ${playing ? 'spinning' : ''}`} size={32} />

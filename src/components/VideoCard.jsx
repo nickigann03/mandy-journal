@@ -1,8 +1,8 @@
 import React, { useRef, useState, useMemo, useEffect } from 'react';
 import Draggable from 'react-draggable';
-import { Video, Square as StopSquare } from 'lucide-react';
+import { Video, Square as StopSquare, X } from 'lucide-react';
 
-const VideoCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateContent }) => {
+const VideoCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -78,6 +78,9 @@ const VideoCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateConte
         className="board-item polaroid-card drag-handle"
         style={{ transform: `rotate(${rotation}deg)` }}
       >
+        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Video Note">
+          <X size={14} />
+        </button>
         <div className={`washi-tape ${tapeColor}`}></div>
         <div className="photo-container">
           {!videoUrl ? (

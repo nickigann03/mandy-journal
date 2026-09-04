@@ -4,7 +4,7 @@ import PolaroidCard from './PolaroidCard';
 import AudioCard from './AudioCard';
 import VideoCard from './VideoCard';
 import StickerCard from './StickerCard';
-import { Plus, Type, Image as ImageIcon, Mic, Video as VideoIcon, Sparkles } from 'lucide-react';
+import { Plus, Type, Image as ImageIcon, Mic, Video as VideoIcon, Sparkles, X } from 'lucide-react';
 
 import catImg from '../assets/stickers/cat.png';
 import sunImg from '../assets/stickers/sun.png';
@@ -29,8 +29,10 @@ const PinboardCanvas = () => {
   const addItemMutation = useMutation(api.items.add);
   const updatePosition = useMutation(api.items.updatePosition);
   const updateContentMutation = useMutation(api.items.updateContent);
+  const removeItemMutation = useMutation(api.items.remove);
   
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showStickerPicker, setShowStickerPicker] = useState(false);
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -64,7 +66,7 @@ const PinboardCanvas = () => {
     return { x, y };
   };
 
-  const addItem = (type) => {
+  const addItem = (type, stickerImg = null) => {
     const position = findEmptyPosition();
     const newItem = { type, position };
 
@@ -82,13 +84,14 @@ const PinboardCanvas = () => {
     } else if (type === 'video') {
       newItem.title = 'Video Note';
     } else if (type === 'sticker') {
-      newItem.imageSrc = stickers[Math.floor(Math.random() * stickers.length)];
+      newItem.imageSrc = stickerImg;
       newItem.position.x += 100;
       newItem.position.y += 100;
     }
 
     addItemMutation(newItem);
-    setMenuOpen(false);
+    if (type !== 'sticker') setMenuOpen(false); // keep menu open if adding stickers so they can add multiple
+    setShowStickerPicker(false);
   };
 
   const handleUpdatePosition = (id, position) => {
@@ -99,6 +102,10 @@ const PinboardCanvas = () => {
     updateContentMutation({ id, ...updates });
   };
 
+  const handleDelete = (id) => {
+    removeItemMutation({ id });
+  };
+
   return (
     <div className="pinboard-wrapper" ref={wrapperRef}>
       <div className="pinboard-canvas">
@@ -107,19 +114,19 @@ const PinboardCanvas = () => {
         </div>
         {items.map(item => {
           if (item.type === 'note') {
-             return <NoteCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} text={item.text} author={item.author} shape={item.shape} color={item.color} hasPushpin={item.hasPushpin} />;
+             return <NoteCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} text={item.text} author={item.author} shape={item.shape} color={item.color} hasPushpin={item.hasPushpin} />;
           }
           if (item.type === 'polaroid') {
-            return <PolaroidCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} imageSrc={item.imageSrc} caption={item.caption} />;
+            return <PolaroidCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} imageSrc={item.imageSrc} caption={item.caption} />;
           }
           if (item.type === 'audio') {
-            return <AudioCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} title={item.title} />;
+            return <AudioCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} title={item.title} />;
           }
           if (item.type === 'video') {
-            return <VideoCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} title={item.title} />;
+            return <VideoCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} title={item.title} />;
           }
           if (item.type === 'sticker') {
-            return <StickerCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} imageSrc={item.imageSrc} />;
+            return <StickerCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onDelete={handleDelete} imageSrc={item.imageSrc} />;
           }
           return null;
         })}
@@ -127,17 +134,33 @@ const PinboardCanvas = () => {
 
       {/* Floating Action Button */}
       <div className="fab-container">
-        {menuOpen && (
+        {showStickerPicker && (
+          <div className="sticker-picker">
+            {stickers.map((src, i) => (
+              <button key={i} className="sticker-option" onClick={() => addItem('sticker', src)}>
+                <img src={src} alt={`sticker ${i}`} />
+              </button>
+            ))}
+          </div>
+        )}
+        
+        {menuOpen && !showStickerPicker && (
           <div className="fab-menu">
             <button onClick={() => addItem('note')} title="Add Note"><Type size={20} /></button>
             <button onClick={() => addItem('polaroid')} title="Add Photo"><ImageIcon size={20} /></button>
             <button onClick={() => addItem('audio')} title="Add Voice Note"><Mic size={20} /></button>
             <button onClick={() => addItem('video')} title="Add Video Clip"><VideoIcon size={20} /></button>
-            <button onClick={() => addItem('sticker')} title="Add Cute Sticker"><Sparkles size={20} /></button>
+            <button onClick={() => setShowStickerPicker(true)} title="Add Cute Sticker"><Sparkles size={20} /></button>
           </div>
         )}
-        <button className="fab-main" onClick={() => setMenuOpen(!menuOpen)}>
-          <Plus size={28} className={menuOpen ? 'rotate' : ''} />
+        <button className="fab-main" onClick={() => {
+          if (showStickerPicker) {
+            setShowStickerPicker(false);
+          } else {
+            setMenuOpen(!menuOpen);
+          }
+        }}>
+          <Plus size={28} className={menuOpen || showStickerPicker ? 'rotate' : ''} />
         </button>
       </div>
     </div>
