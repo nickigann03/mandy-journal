@@ -48,8 +48,14 @@ const PinboardCanvas = () => {
   }, []);
 
   const findEmptyPosition = () => {
-    let x = 1500 - 130;
-    let y = 150;
+    // Start at center of current viewport
+    const scrollX = wrapperRef.current ? wrapperRef.current.scrollLeft : 0;
+    const scrollY = wrapperRef.current ? wrapperRef.current.scrollTop : 0;
+    const startX = scrollX + (window.innerWidth / 2) - 130;
+    const startY = scrollY + (window.innerHeight / 2) - 150;
+    
+    let x = startX;
+    let y = startY;
     let radius = 50;
     let angle = 0;
     
@@ -62,11 +68,14 @@ const PinboardCanvas = () => {
     };
 
     while (isOverlapping(x, y) && radius < 1500) {
-      x = 1500 - 130 + Math.cos(angle) * radius;
-      y = 150 + Math.sin(angle) * radius;
+      x = startX + Math.cos(angle) * radius;
+      y = startY + Math.sin(angle) * radius;
       angle += 0.5;
       radius += 5;
     }
+    
+    x = Math.max(0, Math.min(x, 3000 - 300));
+    y = Math.max(0, Math.min(y, 3000 - 300));
     
     return { x, y };
   };
@@ -74,6 +83,17 @@ const PinboardCanvas = () => {
   const addItem = (type, options = null) => {
     const position = findEmptyPosition();
     const newItem = { type, position };
+
+    // Auto-scroll to the new item's location
+    if (wrapperRef.current) {
+      setTimeout(() => {
+        wrapperRef.current.scrollTo({
+          top: position.y - window.innerHeight / 2 + 150,
+          left: position.x - window.innerWidth / 2 + 130,
+          behavior: 'smooth'
+        });
+      }, 100);
+    }
 
     if (type === 'note') {
       newItem.text = '';
