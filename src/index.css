@@ -791,15 +791,12 @@ body {
   }
   
   /* Make cards slightly narrower on very small screens to ensure they fit */
-  .note-card {
-    width: 240px;
+  .note-card, .polaroid-card, .media-card, .music-card, .open-when-card, .bouquet-card, .sticker-card {
+    max-width: 85vw !important;
   }
-  .polaroid-card {
-    width: var(--card-width, 220px);
-  }
-  .media-card {
-    width: 240px;
-  }
+  .polaroid-card { width: var(--card-width, 220px); }
+  .note-card, .media-card { width: 240px; }
+  
   .media-card video {
     max-height: 140px;
   }
@@ -808,6 +805,40 @@ body {
   .board-title {
     font-size: 2rem !important;
     top: 12px !important;
+  }
+  
+  /* FAB mobile scaling */
+  .fab-container {
+    bottom: 20px;
+    right: 20px;
+  }
+  .fab-main {
+    width: 55px;
+    height: 55px;
+  }
+  .fab-menu button {
+    width: 45px;
+    height: 45px;
+  }
+  
+  /* Prevent sticker picker from bleeding off screen */
+  .sticker-picker {
+    max-width: calc(100vw - 40px) !important;
+    right: 0 !important;
+    padding: 10px;
+  }
+  
+  /* Scale down switch user button */
+  .switch-user-btn {
+    top: 10px;
+    left: 10px;
+    padding: 4px 10px 4px 6px;
+    font-size: 1rem;
+  }
+  .switch-user-btn .avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 1.1rem;
   }
 }
 

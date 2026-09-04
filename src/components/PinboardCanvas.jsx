@@ -64,10 +64,14 @@ const PinboardCanvas = ({ currentUser }) => {
     let angle = 0;
     
     const isOverlapping = (px, py) => {
+      // Use a smaller overlap threshold for mobile devices
+      const isMobile = window.innerWidth < 768;
+      const xThreshold = isMobile ? 120 : 250;
+      const yThreshold = isMobile ? 150 : 220;
       return items.some(item => {
         const dx = Math.abs(item.position.x - px);
         const dy = Math.abs(item.position.y - py);
-        return dx < 280 && dy < 240;
+        return dx < xThreshold && dy < yThreshold;
       });
     };
 
@@ -78,8 +82,10 @@ const PinboardCanvas = ({ currentUser }) => {
       radius += 5;
     }
     
-    x = Math.max(0, Math.min(x, window.innerWidth - 300));
-    y = Math.max(0, Math.min(y, 3000 - 300));
+    // Ensure it doesn't spawn completely off-screen or out of bounds
+    const maxBoardWidth = window.innerWidth;
+    x = Math.max(0, Math.min(x, Math.max(maxBoardWidth - 250, 0)));
+    y = Math.max(0, Math.min(y, 3000 - 250));
     
     return { x, y };
   };
@@ -94,15 +100,15 @@ const PinboardCanvas = ({ currentUser }) => {
     }
 
     // Auto-scroll to the new item's location
-    if (wrapperRef.current) {
-      setTimeout(() => {
+    setTimeout(() => {
+      if (wrapperRef.current) {
         wrapperRef.current.scrollTo({
-          top: position.y - window.innerHeight / 2 + 150,
-          left: position.x - window.innerWidth / 2 + 130,
+          top: Math.max(0, position.y - window.innerHeight / 2 + 150),
+          left: Math.max(0, position.x - window.innerWidth / 2 + 150),
           behavior: 'smooth'
         });
-      }, 100);
-    }
+      }
+    }, 150);
 
     if (type === 'note') {
       newItem.text = '';
