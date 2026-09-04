@@ -41,7 +41,10 @@ const PinboardCanvas = ({ currentUser }) => {
   const [showNotePicker, setShowNotePicker] = useState(false);
   const [showEnvelopePicker, setShowEnvelopePicker] = useState(false);
   const [showBouquetPicker, setShowBouquetPicker] = useState(false);
-  const [mediaPickerType, setMediaPickerType] = useState(null); // 'polaroid' or 'video'
+  const [mediaPickerType, setMediaPickerType] = useState(null); // 'polaroid' | 'video' | 'audio' | 'music'
+  
+  const [showMobileWarning, setShowMobileWarning] = useState(typeof window !== 'undefined' && window.innerWidth < 1024);
+
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -132,6 +135,26 @@ const PinboardCanvas = ({ currentUser }) => {
   return (
     <div className={`pinboard-wrapper ${placementMode ? 'placement-mode' : ''}`} ref={wrapperRef} onClick={handleCanvasClick} onMouseMove={handleMouseMove} style={{ cursor: placementMode ? 'crosshair' : 'default' }}>
       
+      {showMobileWarning && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, width: '100%', 
+          background: '#ff6b6b', color: 'white', padding: '12px 20px',
+          zIndex: 10001, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          fontFamily: "'Quicksand', sans-serif", fontWeight: '600', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '1.2rem' }}>📱</span>
+            <span style={{ fontSize: '0.95rem' }}>This is best viewed on a larger screen! You can scroll around for now.</span>
+          </div>
+          <button 
+            onClick={(e) => { e.stopPropagation(); setShowMobileWarning(false); }}
+            style={{ background: 'rgba(255,255,255,0.2)', border: 'none', color: 'white', width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
+
       {placementMode && (
         <div style={{
           position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)',

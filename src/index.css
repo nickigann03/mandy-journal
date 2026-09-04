@@ -29,8 +29,7 @@ body {
 .pinboard-wrapper {
   width: 100vw;
   height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto;
   position: relative;
   background-color: var(--bg-color);
   background-image: repeating-linear-gradient(
@@ -44,8 +43,9 @@ body {
 
 
 .pinboard-canvas {
-  /* Scrollable only vertically */
+  /* Scrollable only vertically, unless window is smaller than 1400px */
   width: 100%;
+  min-width: 1400px;
   height: 3000px;
   position: relative;
 }
@@ -885,6 +885,8 @@ body {
 .user-setup-modal {
   background: white;
   padding: 25px 20px;
+  max-height: 90vh;
+  overflow-y: auto;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   text-align: center;
