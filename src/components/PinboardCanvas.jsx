@@ -6,7 +6,19 @@ import VideoCard from './VideoCard';
 import StickerCard from './StickerCard';
 import { Plus, Type, Image as ImageIcon, Mic, Video as VideoIcon, Sparkles } from 'lucide-react';
 
-const stickers = ['🌸', '🌺', '🌼', '🌻', '⭐', '✨', '💖', '💝', '🦋', '🎀', '🧸', '🍓', '🍒', '🍑', '🍦', '🎨', '🌈'];
+import catImg from '../assets/stickers/cat.png';
+import sunImg from '../assets/stickers/sun.png';
+import rainbowImg from '../assets/stickers/rainbow.png';
+import coffeeImg from '../assets/stickers/coffee.png';
+import dogImg from '../assets/stickers/dog.png';
+import cupcakeImg from '../assets/stickers/cupcake.png';
+import cactusImg from '../assets/stickers/cactus.png';
+import pizzaImg from '../assets/stickers/pizza.png';
+import flowerImg from '../assets/stickers/flower.png';
+import starImg from '../assets/stickers/star.png';
+import heartImg from '../assets/stickers/heart.png';
+
+const stickers = [catImg, sunImg, rainbowImg, coffeeImg, dogImg, cupcakeImg, cactusImg, pizzaImg, flowerImg, starImg, heartImg];
 const noteColors = ['white', 'yellow', 'pink', 'blue', 'green'];
 const noteShapes = ['square', 'circle', 'scallop'];
 
@@ -30,13 +42,13 @@ const PinboardCanvas = () => {
       {
         id: 2,
         type: 'sticker',
-        emoji: '⭐',
+        imageSrc: starImg,
         position: { x: 1500 - 250, y: 100 }
       },
       {
         id: 3,
         type: 'sticker',
-        emoji: '🌸',
+        imageSrc: flowerImg,
         position: { x: 1500 + 150, y: 300 }
       }
     ]);
@@ -89,7 +101,7 @@ const PinboardCanvas = () => {
     } else if (type === 'video') {
       newItem.title = 'Video Note';
     } else if (type === 'sticker') {
-      newItem.emoji = stickers[Math.floor(Math.random() * stickers.length)];
+      newItem.imageSrc = stickers[Math.floor(Math.random() * stickers.length)];
       // Stickers are smaller, let's adjust position slightly so they don't jump too far
       newItem.position.x += 100;
       newItem.position.y += 100;
@@ -119,7 +131,7 @@ const PinboardCanvas = () => {
             return <VideoCard key={item.id} defaultPosition={item.position} title={item.title} />;
           }
           if (item.type === 'sticker') {
-            return <StickerCard key={item.id} defaultPosition={item.position} emoji={item.emoji} />;
+            return <StickerCard key={item.id} defaultPosition={item.position} imageSrc={item.imageSrc} />;
           }
           return null;
         })}

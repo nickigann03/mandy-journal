@@ -451,3 +451,11 @@ body {
 }
 .fab-main:hover { transform: scale(1.1); }
 .fab-main .rotate { transform: rotate(45deg); transition: transform 0.3s; }
+
+.sticker-img {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  /* if the background removal isn't perfect, a drop shadow helps it pop */
+}

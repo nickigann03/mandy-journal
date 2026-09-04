@@ -1,7 +1,7 @@
 import React, { useRef, useMemo } from 'react';
 import Draggable from 'react-draggable';
 
-const StickerCard = ({ defaultPosition, emoji }) => {
+const StickerCard = ({ defaultPosition, imageSrc }) => {
   const nodeRef = useRef(null);
   const rotation = useMemo(() => Math.random() * 30 - 15, []); // More rotation for stickers
 
@@ -10,9 +10,9 @@ const StickerCard = ({ defaultPosition, emoji }) => {
       <div 
         ref={nodeRef} 
         className="board-item sticker-card drag-handle"
-        style={{ transform: `rotate(${rotation}deg)`, fontSize: '4rem', userSelect: 'none' }}
+        style={{ transform: `rotate(${rotation}deg)` }}
       >
-        <span draggable="false">{emoji}</span>
+        <img src={imageSrc} alt="sticker" draggable="false" className="sticker-img" />
       </div>
     </Draggable>
   );
