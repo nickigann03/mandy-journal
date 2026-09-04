@@ -9,7 +9,6 @@ import { Plus, Type, Image as ImageIcon, Mic, Video as VideoIcon, Sparkles, X } 
 import catImg from '../assets/stickers/cat.png';
 import sunImg from '../assets/stickers/sun.png';
 import rainbowImg from '../assets/stickers/rainbow.png';
-import coffeeImg from '../assets/stickers/coffee.png';
 import dogImg from '../assets/stickers/dog.png';
 import cactusImg from '../assets/stickers/cactus.png';
 import pizzaImg from '../assets/stickers/pizza.png';
@@ -17,7 +16,7 @@ import flowerImg from '../assets/stickers/flower.png';
 import starImg from '../assets/stickers/star.png';
 import heartImg from '../assets/stickers/heart.png';
 
-const stickers = [catImg, sunImg, rainbowImg, coffeeImg, dogImg, cactusImg, pizzaImg, flowerImg, starImg, heartImg];
+const stickers = [catImg, sunImg, rainbowImg, dogImg, cactusImg, pizzaImg, flowerImg, starImg, heartImg];
 const noteColors = ['white', 'yellow', 'pink', 'blue', 'green'];
 const noteShapes = ['square', 'circle', 'scallop'];
 
