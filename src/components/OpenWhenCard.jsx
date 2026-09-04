@@ -32,7 +32,7 @@ const OpenWhenCard = ({ id, defaultPosition, prompt = "you're sad", text = "", i
     <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, textarea, button, .flap" onStop={handleStop}>
       <div ref={nodeRef} className={`board-item drag-handle open-when-card ${opened ? 'is-open' : 'is-closed'} color-${color}`} style={{ transform: `rotate(${rotation}deg)` }}>
         <CreatorTag name={creatorName} avatar={creatorAvatar} />
-        {onDelete && (
+        {!opened && onDelete && (
           <button className="delete-btn" onClick={() => onDelete(id)} title="Delete">
             <X size={14} />
           </button>
@@ -56,9 +56,8 @@ const OpenWhenCard = ({ id, defaultPosition, prompt = "you're sad", text = "", i
         ) : (
           <div className="envelope-opened interactive">
             <div className="envelope-header">
-              <button onClick={toggleOpen} className="close-envelope-btn" style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#f5f5f5', padding: '6px 12px', borderRadius: '12px', border: '1px solid #ddd', color: '#555', fontWeight: 'bold', cursor: 'pointer' }} title="Seal Letter">
-                <Mail size={16} />
-                <span style={{ fontSize: '0.85rem' }}>Seal Envelope</span>
+              <button onClick={toggleOpen} className="close-envelope-btn" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '50%', background: '#ffe4e8', color: '#ff4757', border: 'none', cursor: 'pointer', flexShrink: 0, transition: 'all 0.2s' }} title="Seal Envelope">
+                <Mail size={20} />
               </button>
               <div className="opened-prompt">Open when {currentPrompt || "..."}</div>
             </div>
