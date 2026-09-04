@@ -810,3 +810,114 @@ body {
     top: 12px !important;
   }
 }
+
+/* --- Creator Tags --- */
+.creator-tag {
+  position: absolute;
+  bottom: -15px;
+  right: 15px;
+  background: white;
+  border: 2px solid var(--text-primary);
+  border-radius: 20px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 1rem;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+  z-index: 20;
+  pointer-events: none;
+  transform: rotate(-2deg);
+}
+.creator-avatar { font-size: 1.2rem; }
+.creator-name { color: var(--text-primary); font-weight: bold; }
+
+/* --- User Setup Modal --- */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(5px);
+}
+.user-setup-modal {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+  text-align: center;
+  max-width: 450px;
+  width: 90%;
+  border: 3px solid var(--text-primary);
+}
+.user-setup-modal h2 { margin-bottom: 15px; color: var(--text-primary); font-family: 'Patrick Hand', cursive; font-size: 2.2rem; }
+.user-setup-modal p { color: #555; margin-bottom: 30px; font-family: 'Patrick Hand', cursive; font-size: 1.2rem; }
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+.avatar-btn {
+  font-size: 2.5rem;
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.avatar-btn:hover { background: #f0f0f0; transform: scale(1.1); }
+.avatar-btn.selected { border-color: var(--text-primary); background: #f9f9f9; transform: scale(1.1); box-shadow: 3px 3px 0 rgba(0,0,0,0.1); }
+.name-input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid var(--text-primary);
+  border-radius: 12px;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  font-family: 'Patrick Hand', cursive;
+  outline: none;
+  transition: box-shadow 0.2s;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.05);
+}
+.name-input:focus { box-shadow: 5px 5px 0 rgba(0,0,0,0.1); }
+.start-btn {
+  width: 100%;
+  padding: 15px;
+  background: var(--text-primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.3rem;
+  font-family: 'Patrick Hand', cursive;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+}
+.start-btn:hover:not(:disabled) { transform: translateY(-2px); opacity: 0.9; }
+.start-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
+
+.switch-user-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border: 2px solid var(--text-primary);
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.2s;
+}
+.switch-user-btn:hover { transform: scale(1.1) rotate(-5deg); }

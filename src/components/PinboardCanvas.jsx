@@ -29,7 +29,7 @@ const noteShapes = ['square', 'circle', 'scallop'];
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 
-const PinboardCanvas = () => {
+const PinboardCanvas = ({ currentUser }) => {
   const items = useQuery(api.items.get) || [];
   const addItemMutation = useMutation(api.items.add);
   const updatePosition = useMutation(api.items.updatePosition);
@@ -87,6 +87,11 @@ const PinboardCanvas = () => {
   const addItem = (type, options = null) => {
     const position = findEmptyPosition();
     const newItem = { type, position };
+    
+    if (currentUser) {
+      newItem.creatorName = currentUser.name;
+      newItem.creatorAvatar = currentUser.avatar;
+    }
 
     // Auto-scroll to the new item's location
     if (wrapperRef.current) {
@@ -152,29 +157,35 @@ const PinboardCanvas = () => {
           Dearest Mandy,
         </div>
         {items.map(item => {
+          const commonProps = {
+            key: item._id, id: item._id, defaultPosition: item.position,
+            onUpdatePosition: handleUpdatePosition, onDelete: handleDelete,
+            creatorName: item.creatorName, creatorAvatar: item.creatorAvatar
+          };
+
           if (item.type === 'note') {
-             return <NoteCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} text={item.text} author={item.author} shape={item.shape} color={item.color} hasPushpin={item.hasPushpin} />;
+             return <NoteCard {...commonProps} onUpdateContent={handleUpdateContent} text={item.text} author={item.author} shape={item.shape} color={item.color} hasPushpin={item.hasPushpin} />;
           }
           if (item.type === 'polaroid') {
-            return <PolaroidCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} imageSrc={item.imageSrc} caption={item.caption} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
+            return <PolaroidCard {...commonProps} onUpdateContent={handleUpdateContent} imageSrc={item.imageSrc} caption={item.caption} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
           }
           if (item.type === 'audio') {
-            return <AudioCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} title={item.title} />;
+            return <AudioCard {...commonProps} onUpdateContent={handleUpdateContent} title={item.title} />;
           }
           if (item.type === 'video') {
-            return <VideoCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} title={item.title} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
+            return <VideoCard {...commonProps} onUpdateContent={handleUpdateContent} title={item.title} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
           }
           if (item.type === 'sticker') {
-            return <StickerCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onDelete={handleDelete} imageSrc={item.imageSrc} />;
+            return <StickerCard {...commonProps} imageSrc={item.imageSrc} />;
           }
           if (item.type === 'open_when') {
-            return <OpenWhenCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} prompt={item.prompt} text={item.text} isOpen={item.isOpen} color={item.color} />;
+            return <OpenWhenCard {...commonProps} onUpdateContent={handleUpdateContent} prompt={item.prompt} text={item.text} isOpen={item.isOpen} color={item.color} />;
           }
           if (item.type === 'music') {
-            return <MusicCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} url={item.url} />;
+            return <MusicCard {...commonProps} onUpdateContent={handleUpdateContent} url={item.url} />;
           }
           if (item.type === 'bouquet') {
-            return <BouquetCard key={item._id} id={item._id} defaultPosition={item.position} imageSrc={item.imageSrc} onUpdatePosition={handleUpdatePosition} onDelete={handleDelete} />;
+            return <BouquetCard {...commonProps} imageSrc={item.imageSrc} />;
           }
           return null;
         })}

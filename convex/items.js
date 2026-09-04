@@ -26,6 +26,8 @@ export const add = mutation({
     url: v.optional(v.string()),
     prompt: v.optional(v.string()),
     isOpen: v.optional(v.boolean()),
+    creatorName: v.optional(v.string()),
+    creatorAvatar: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("items", args);

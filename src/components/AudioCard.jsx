@@ -76,6 +76,7 @@ const AudioCard = ({ id, defaultPosition, title, color = 'white', onUpdatePositi
         className={`board-item media-card drag-handle color-${currentColor}`}
         style={{ transform: `rotate(${rotation}deg)` }}
       >
+        <CreatorTag name={creatorName} avatar={creatorAvatar} />
         <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Audio Note">
           <X size={14} />
         </button>

@@ -2,8 +2,9 @@ import React, { useRef, useMemo, useState } from 'react';
 import Draggable from 'react-draggable';
 import { X } from 'lucide-react';
 import bouquetImg from '../assets/stickers/bouquet.jpg';
+import CreatorTag from './CreatorTag';
 
-const BouquetCard = ({ id, defaultPosition, imageSrc = bouquetImg, onUpdatePosition, onDelete }) => {
+const BouquetCard = ({ id, defaultPosition, imageSrc = bouquetImg, creatorName, creatorAvatar, onUpdatePosition, onDelete }) => {
   const nodeRef = useRef(null);
   const [animating, setAnimating] = useState(false);
   const rotation = useMemo(() => Math.random() * 8 - 4, []);
@@ -29,14 +30,13 @@ const BouquetCard = ({ id, defaultPosition, imageSrc = bouquetImg, onUpdatePosit
 
   return (
     <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="button" onStop={handleStop}>
-      <div 
-        ref={nodeRef} 
-        className="board-item drag-handle bouquet-card"
-        style={{ transform: `rotate(${rotation}deg)` }}
-      >
-        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete">
-          <X size={14} />
-        </button>
+      <div ref={nodeRef} className="board-item drag-handle bouquet-card" style={{ background: 'none', boxShadow: 'none', padding: 0, transform: `rotate(${rotation}deg)` }}>
+        <div style={{ position: 'relative' }}>
+          <CreatorTag name={creatorName} avatar={creatorAvatar} />
+          <button className="delete-btn" onClick={() => onDelete && onDelete(id)} style={{ top: 0, right: 0, zIndex: 10 }} title="Delete">
+            <X size={14} />
+          </button>
+        </div>
 
         <div className="bouquet-container" onClick={triggerAnimation}>
           <img src={imageSrc} alt="Virtual Bouquet" className="bouquet-img" />

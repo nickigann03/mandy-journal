@@ -94,14 +94,14 @@ const VideoCard = ({ id, defaultPosition, title, width = 240, height = 300, hasF
       });
     };
     
-    const handleMouseUp = () => {
+    const handleMouseUp = (e) => {
       setIsResizing(false);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
       // Sync new size to Convex
       if (onUpdateContent) onUpdateContent(id, { 
-        width: Math.max(150, startSize.current.width + (window.event.clientX - startPos.current.x)), 
-        height: Math.max(150, startSize.current.height + (window.event.clientY - startPos.current.y)) 
+        width: Math.max(150, startSize.current.width + (e.clientX - startPos.current.x)), 
+        height: Math.max(150, startSize.current.height + (e.clientY - startPos.current.y)) 
       });
     };
 
@@ -120,6 +120,7 @@ const VideoCard = ({ id, defaultPosition, title, width = 240, height = 300, hasF
           height: `${size.height}px`
         }}
       >
+        <CreatorTag name={creatorName} avatar={creatorAvatar} />
         <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Video Note">
           <X size={14} />
         </button>

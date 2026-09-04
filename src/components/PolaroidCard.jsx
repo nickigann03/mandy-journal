@@ -75,6 +75,7 @@ const PolaroidCard = ({ id, defaultPosition, imageSrc, caption, width = 240, hei
           height: `${size.height}px`
         }}
       >
+        <CreatorTag name={creatorName} avatar={creatorAvatar} />
         <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Photo">
           <X size={14} />
         </button>

@@ -1,8 +1,9 @@
 import React, { useRef, useState, useMemo, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import { Minus, Plus, Type, X } from 'lucide-react';
+import CreatorTag from './CreatorTag';
 
-const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color = 'white', hasPushpin = false, onUpdatePosition, onUpdateContent, onDelete }) => {
+const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color = 'white', hasPushpin = false, creatorName, creatorAvatar, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [currentText, setCurrentText] = useState(text || '');
   const [currentAuthor, setCurrentAuthor] = useState(author || '');
@@ -36,6 +37,7 @@ const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color =
         className={`board-item note-card drag-handle shape-${shape} color-${color}`} 
         style={{ transform: `rotate(${rotation}deg)` }}
       >
+        <CreatorTag name={creatorName} avatar={creatorAvatar} />
         <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Note">
           <X size={14} />
         </button>

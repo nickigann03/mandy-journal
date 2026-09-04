@@ -8,6 +8,8 @@ export default defineSchema({
       x: v.number(),
       y: v.number(),
     }),
+    creatorName: v.optional(v.string()),
+    creatorAvatar: v.optional(v.string()),
     
     // Note specific
     text: v.optional(v.string()),

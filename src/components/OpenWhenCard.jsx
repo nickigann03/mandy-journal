@@ -1,8 +1,9 @@
 import React, { useRef, useState, useMemo, useEffect } from 'react';
 import Draggable from 'react-draggable';
-import { Mail, MailOpen, X, Edit3 } from 'lucide-react';
+import { MailOpen, X } from 'lucide-react';
+import CreatorTag from './CreatorTag';
 
-const OpenWhenCard = ({ id, defaultPosition, prompt, text, isOpen = false, color = 'white', onUpdatePosition, onUpdateContent, onDelete }) => {
+const OpenWhenCard = ({ id, defaultPosition, prompt = "you're sad", text = "", isOpen = false, color = 'white', creatorName, creatorAvatar, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [currentPrompt, setCurrentPrompt] = useState(prompt || '');
   const [currentText, setCurrentText] = useState(text || '');
@@ -28,12 +29,9 @@ const OpenWhenCard = ({ id, defaultPosition, prompt, text, isOpen = false, color
   };
 
   return (
-    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="textarea, input, button, .interactive" onStop={handleStop}>
-      <div 
-        ref={nodeRef} 
-        className={`board-item drag-handle open-when-card ${opened ? 'is-open' : 'is-closed'} color-${color}`}
-        style={{ transform: `rotate(${rotation}deg)` }}
-      >
+    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, textarea, button, .flap" onStop={handleStop}>
+      <div ref={nodeRef} className={`board-item drag-handle open-when-card ${opened ? 'is-open' : 'is-closed'} color-${color}`} style={{ transform: `rotate(${rotation}deg)` }}>
+        <CreatorTag name={creatorName} avatar={creatorAvatar} />
         <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete">
           <X size={14} />
         </button>

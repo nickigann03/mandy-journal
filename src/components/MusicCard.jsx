@@ -1,8 +1,9 @@
 import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
 import { Music, X, Check } from 'lucide-react';
+import CreatorTag from './CreatorTag';
 
-const MusicCard = ({ id, defaultPosition, url, onUpdatePosition, onUpdateContent, onDelete }) => {
+const MusicCard = ({ id, defaultPosition, url, creatorName, creatorAvatar, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [inputUrl, setInputUrl] = useState(url || '');
   const [isEditing, setIsEditing] = useState(!url);
@@ -48,7 +49,8 @@ const MusicCard = ({ id, defaultPosition, url, onUpdatePosition, onUpdateContent
   return (
     <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, button, iframe" onStop={handleStop}>
       <div ref={nodeRef} className="board-item drag-handle music-card" style={{ transform: `rotate(${rotation}deg)` }}>
-        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete">
+        <CreatorTag name={creatorName} avatar={creatorAvatar} />
+        <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Music">
           <X size={14} />
         </button>
 
