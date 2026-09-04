@@ -154,7 +154,7 @@ const PinboardCanvas = ({ currentUser }) => {
       )}
 
       <div className="pinboard-canvas">
-        <div className="board-title" style={{ position: 'absolute', top: 20, left: '50%', transform: 'translateX(-50%)', fontSize: '2.5rem', opacity: 0.8, pointerEvents: 'none' }}>
+        <div className="board-title" style={{ position: 'absolute', top: 40, left: '50%', transform: 'translateX(-50%)', fontSize: '2.5rem', opacity: 0.8, pointerEvents: 'none', zIndex: 10, fontFamily: 'var(--font-ui)', color: '#555', whiteSpace: 'nowrap' }}>
           Dearest Mandy,
         </div>
         {items.map(item => {
