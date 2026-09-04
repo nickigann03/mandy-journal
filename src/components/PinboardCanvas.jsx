@@ -52,41 +52,23 @@ const PinboardCanvas = ({ currentUser }) => {
   }, []);
 
   const findEmptyPosition = () => {
-    const isMobile = window.innerWidth < 768;
-    const xThreshold = isMobile ? 120 : 250;
-    const yThreshold = isMobile ? 150 : 220;
+    // Spawn exactly at the center of the current viewport
+    const scrollX = wrapperRef.current ? wrapperRef.current.scrollLeft : 0;
+    const scrollY = wrapperRef.current ? wrapperRef.current.scrollTop : 0;
     
-    const isOverlapping = (px, py) => {
-      return items.some(item => {
-        // Exclude stickers from taking up physical space so they can overlap and we don't dodge them
-        if (item.type === 'sticker') return false; 
-        const dx = Math.abs(item.position.x - px);
-        const dy = Math.abs(item.position.y - py);
-        return dx < xThreshold && dy < yThreshold;
-      });
-    };
-
+    // Add a tiny bit of random scatter so spamming the button doesn't perfectly overlap them
+    const randomOffsetX = (Math.random() - 0.5) * 40;
+    const randomOffsetY = (Math.random() - 0.5) * 40;
+    
+    let x = scrollX + (window.innerWidth / 2) - 130 + randomOffsetX;
+    let y = scrollY + (window.innerHeight / 2) - 150 + randomOffsetY;
+    
+    // Ensure it doesn't spawn completely out of bounds
     const maxBoardWidth = window.innerWidth;
-    const center = maxBoardWidth / 2 - 130;
+    x = Math.max(0, Math.min(x, Math.max(maxBoardWidth - 250, 0)));
+    y = Math.max(0, Math.min(y, 3000 - 250));
     
-    // Generate organic positions favoring the center first, then spreading outwards
-    const xOptions = [Math.max(0, center)];
-    for (let offset = 80; offset < maxBoardWidth / 2; offset += 80) {
-      xOptions.push(Math.max(0, center - offset));
-      xOptions.push(Math.min(maxBoardWidth - 250, center + offset));
-    }
-    
-    // Scan from top (y=100) to bottom (y=2800)
-    for (let py = 100; py < 2800; py += 100) {
-      for (const px of xOptions) {
-        if (!isOverlapping(px, py)) {
-          return { x: px, y: py };
-        }
-      }
-    }
-    
-    // Fallback if somehow completely full
-    return { x: Math.max(0, center), y: 1500 };
+    return { x, y };
   };
 
   const addItem = (type, options = null) => {
@@ -97,16 +79,6 @@ const PinboardCanvas = ({ currentUser }) => {
       newItem.creatorName = currentUser.name;
       newItem.creatorAvatar = currentUser.avatar;
     }
-
-    // Auto-scroll to the new item's location
-    setTimeout(() => {
-      if (wrapperRef.current) {
-        wrapperRef.current.scrollTo({
-          top: newItem.position.y - window.innerHeight / 2 + 150,
-          behavior: 'smooth'
-        });
-      }
-    }, 250);
 
     if (type === 'note') {
       newItem.text = '';
