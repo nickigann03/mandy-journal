@@ -27,5 +27,10 @@ export default defineSchema({
     width: v.optional(v.number()),
     height: v.optional(v.number()),
     hasFrame: v.optional(v.boolean()),
+    // Music specific
+    url: v.optional(v.string()),
+    // Open When specific
+    prompt: v.optional(v.string()),
+    isOpen: v.optional(v.boolean()),
   }),
 });

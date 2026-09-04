@@ -23,6 +23,9 @@ export const add = mutation({
     width: v.optional(v.number()),
     height: v.optional(v.number()),
     hasFrame: v.optional(v.boolean()),
+    url: v.optional(v.string()),
+    prompt: v.optional(v.string()),
+    isOpen: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("items", args);
@@ -51,6 +54,9 @@ export const updateContent = mutation({
     width: v.optional(v.number()),
     height: v.optional(v.number()),
     hasFrame: v.optional(v.boolean()),
+    url: v.optional(v.string()),
+    prompt: v.optional(v.string()),
+    isOpen: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const { id, ...rest } = args;

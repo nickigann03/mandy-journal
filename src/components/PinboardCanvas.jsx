@@ -4,7 +4,10 @@ import PolaroidCard from './PolaroidCard';
 import AudioCard from './AudioCard';
 import VideoCard from './VideoCard';
 import StickerCard from './StickerCard';
-import { Plus, Type, Image as ImageIcon, Mic, Video as VideoIcon, Sparkles, X } from 'lucide-react';
+import OpenWhenCard from './OpenWhenCard';
+import MusicCard from './MusicCard';
+import BouquetCard from './BouquetCard';
+import { Plus, Type, Image as ImageIcon, Mic, Video as VideoIcon, Sparkles, X, Mail, Music, Gift } from 'lucide-react';
 
 import catImg from '../assets/stickers/cat.png';
 import sunImg from '../assets/stickers/sun.png';
@@ -133,6 +136,15 @@ const PinboardCanvas = () => {
           if (item.type === 'sticker') {
             return <StickerCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onDelete={handleDelete} imageSrc={item.imageSrc} />;
           }
+          if (item.type === 'open_when') {
+            return <OpenWhenCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} prompt={item.prompt} text={item.text} isOpen={item.isOpen} />;
+          }
+          if (item.type === 'music') {
+            return <MusicCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} url={item.url} />;
+          }
+          if (item.type === 'bouquet') {
+            return <BouquetCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onDelete={handleDelete} />;
+          }
           return null;
         })}
       </div>
@@ -183,6 +195,9 @@ const PinboardCanvas = () => {
             <button onClick={() => addItem('audio')} title="Add Voice Note"><Mic size={20} /></button>
             <button onClick={() => setMediaPickerType('video')} title="Add Video Clip"><VideoIcon size={20} /></button>
             <button onClick={() => setShowStickerPicker(true)} title="Add Cute Sticker"><Sparkles size={20} /></button>
+            <button onClick={() => addItem('open_when')} title="Add Open When Envelope"><Mail size={20} /></button>
+            <button onClick={() => addItem('music')} title="Add Spotify/YouTube Music"><Music size={20} /></button>
+            <button onClick={() => addItem('bouquet')} title="Add Virtual Bouquet"><Gift size={20} /></button>
           </div>
         )}
         <button className="fab-main" onClick={() => {
