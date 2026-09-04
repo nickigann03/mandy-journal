@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { LogOut } from 'lucide-react';
 import PinboardCanvas from './components/PinboardCanvas';
 import UserSetupModal from './components/UserSetupModal';
 
@@ -30,9 +31,11 @@ function App() {
         <button 
           className="switch-user-btn" 
           onClick={handleLogout} 
-          title="Switch User"
+          title="Change User"
         >
-          {currentUser.avatar}
+          <span>{currentUser.avatar}</span>
+          <span style={{ fontSize: '1rem', marginRight: '4px' }}>Change User</span>
+          <LogOut size={14} />
         </button>
       )}
 
