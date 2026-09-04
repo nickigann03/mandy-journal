@@ -1,13 +1,20 @@
 import React, { useRef, useState, useMemo, useEffect } from 'react';
 import Draggable from 'react-draggable';
-import { Video, Square as StopSquare, X } from 'lucide-react';
+import { Video, Square as StopSquare, X, Frame } from 'lucide-react';
 
-const VideoCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateContent, onDelete }) => {
+const VideoCard = ({ id, defaultPosition, title, width = 240, height = 300, hasFrame = true, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(title || 'Video Note');
   const [streamReady, setStreamReady] = useState(false);
+  const [frameEnabled, setFrameEnabled] = useState(hasFrame);
+  
+  // Resizing state
+  const [size, setSize] = useState({ width, height });
+  const [isResizing, setIsResizing] = useState(false);
+  const startSize = useRef({ width: 0, height: 0 });
+  const startPos = useRef({ x: 0, y: 0 });
   
   const videoPreviewRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -71,17 +78,63 @@ const VideoCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateConte
     }
   };
 
+  const handleResizeStart = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setIsResizing(true);
+    startSize.current = { width: size.width, height: size.height };
+    startPos.current = { x: e.clientX, y: e.clientY };
+    
+    const handleMouseMove = (moveEvent) => {
+      const deltaX = moveEvent.clientX - startPos.current.x;
+      const deltaY = moveEvent.clientY - startPos.current.y;
+      setSize({
+        width: Math.max(150, startSize.current.width + deltaX),
+        height: Math.max(150, startSize.current.height + deltaY)
+      });
+    };
+    
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+      // Sync new size to Convex
+      if (onUpdateContent) onUpdateContent(id, { 
+        width: Math.max(150, startSize.current.width + (window.event.clientX - startPos.current.x)), 
+        height: Math.max(150, startSize.current.height + (window.event.clientY - startPos.current.y)) 
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+  };
+
   return (
-    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, button, video" onStop={handleStop}>
+    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, button, video, .resize-handle" onStop={handleStop} disabled={isResizing}>
       <div 
         ref={nodeRef} 
-        className="board-item polaroid-card drag-handle"
-        style={{ transform: `rotate(${rotation}deg)` }}
+        className={`board-item polaroid-card drag-handle ${!frameEnabled ? 'frameless' : ''}`}
+        style={{ 
+          transform: `rotate(${rotation}deg)`,
+          width: `${size.width}px`,
+          height: `${size.height}px`
+        }}
       >
         <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Video Note">
           <X size={14} />
         </button>
-        <div className={`washi-tape ${tapeColor}`}></div>
+        <div className="note-toolbar" style={{ right: '40px' }}>
+          <button 
+            onClick={() => {
+              setFrameEnabled(!frameEnabled);
+              if (onUpdateContent) onUpdateContent(id, { hasFrame: !frameEnabled });
+            }} 
+            title={frameEnabled ? "Remove Frame" : "Add Frame"}
+          >
+            <Frame size={14} />
+          </button>
+        </div>
+        <div className={`washi-tape ${tapeColor}`} style={{ display: frameEnabled ? 'block' : 'none' }}></div>
         <div className="photo-container">
           {!videoUrl ? (
             <>
@@ -111,10 +164,13 @@ const VideoCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateConte
         <input 
           value={currentTitle} 
           onChange={(e) => setCurrentTitle(e.target.value)} 
-          onBlur={() => onUpdateContent && onUpdateContent(id, { title: currentTitle })}
+          onBlur={() => onUpdateContent && onUpdateContent(id, { title: currentTitle, width: size.width, height: size.height, hasFrame: frameEnabled })}
           placeholder="Add a cute caption..."
           className="caption-input"
+          style={{ display: frameEnabled || currentTitle ? 'block' : 'none' }}
         />
+        
+        <div className="resize-handle" onMouseDown={handleResizeStart}></div>
       </div>
     </Draggable>
   );

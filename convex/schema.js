@@ -22,5 +22,10 @@ export default defineSchema({
     
     // Media specific
     title: v.optional(v.string()),
+    
+    // Resizable and Frameless support
+    width: v.optional(v.number()),
+    height: v.optional(v.number()),
+    hasFrame: v.optional(v.boolean()),
   }),
 });

@@ -1,13 +1,17 @@
 import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
-import { Play, Square, Disc, Mic, Square as StopSquare, X } from 'lucide-react';
+import { Play, Square, Disc, Mic, Square as StopSquare, X, Palette } from 'lucide-react';
 
-const AudioCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateContent, onDelete }) => {
+const AudioCard = ({ id, defaultPosition, title, color = 'white', onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(title || 'Voice Note');
+  const [currentColor, setCurrentColor] = useState(color);
+  const [showPalette, setShowPalette] = useState(false);
+  
+  const colors = ['white', 'yellow', 'pink', 'blue', 'green'];
   
   const audioRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -69,12 +73,33 @@ const AudioCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateConte
     <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, button" onStop={handleStop}>
       <div 
         ref={nodeRef} 
-        className="board-item media-card drag-handle"
+        className={`board-item media-card drag-handle color-${currentColor}`}
         style={{ transform: `rotate(${rotation}deg)` }}
       >
         <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete Audio Note">
           <X size={14} />
         </button>
+        <div className="note-toolbar" style={{ right: '40px' }}>
+          <button onClick={() => setShowPalette(!showPalette)}><Palette size={14} /></button>
+        </div>
+        
+        {showPalette && (
+          <div className="color-picker-drawer">
+            {colors.map(c => (
+              <button 
+                key={c} 
+                className={`note-option shape-square color-${c}`} 
+                style={{ width: 24, height: 24, padding: 0 }}
+                onClick={() => {
+                  setCurrentColor(c);
+                  setShowPalette(false);
+                  if (onUpdateContent) onUpdateContent(id, { color: c });
+                }}
+              />
+            ))}
+          </div>
+        )}
+        
         <div className={`washi-tape ${tapeColor}`}></div>
         <div className="audio-header">
           <Disc className={`disc-icon ${playing ? 'spinning' : ''}`} size={32} />
