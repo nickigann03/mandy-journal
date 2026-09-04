@@ -36,6 +36,7 @@ const PinboardCanvas = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showStickerPicker, setShowStickerPicker] = useState(false);
   const [showNotePicker, setShowNotePicker] = useState(false);
+  const [showEnvelopePicker, setShowEnvelopePicker] = useState(false);
   const [mediaPickerType, setMediaPickerType] = useState(null); // 'polaroid' or 'video'
   const wrapperRef = useRef(null);
 
@@ -93,12 +94,15 @@ const PinboardCanvas = () => {
       newItem.imageSrc = options; // For stickers, options is just the image source
       newItem.position.x += 100;
       newItem.position.y += 100;
+    } else if (type === 'open_when') {
+      newItem.color = options?.color || 'white';
     }
 
     addItemMutation(newItem);
-    if (type !== 'sticker' && type !== 'note' && type !== 'polaroid' && type !== 'video') setMenuOpen(false); 
+    if (type !== 'sticker' && type !== 'note' && type !== 'polaroid' && type !== 'video' && type !== 'open_when') setMenuOpen(false); 
     setShowStickerPicker(false);
     setShowNotePicker(false);
+    setShowEnvelopePicker(false);
     setMediaPickerType(null);
   };
 
@@ -137,7 +141,7 @@ const PinboardCanvas = () => {
             return <StickerCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onDelete={handleDelete} imageSrc={item.imageSrc} />;
           }
           if (item.type === 'open_when') {
-            return <OpenWhenCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} prompt={item.prompt} text={item.text} isOpen={item.isOpen} />;
+            return <OpenWhenCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} prompt={item.prompt} text={item.text} isOpen={item.isOpen} color={item.color} />;
           }
           if (item.type === 'music') {
             return <MusicCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} url={item.url} />;
@@ -174,6 +178,14 @@ const PinboardCanvas = () => {
             ))}
           </div>
         )}
+
+        {showEnvelopePicker && (
+          <div className="sticker-picker" style={{ gridTemplateColumns: 'repeat(5, 1fr)', width: '220px' }}>
+            {noteColors.map((color, i) => (
+              <button key={`envelope-${i}`} className={`note-option shape-square color-${color}`} style={{ borderRadius: '4px' }} onClick={() => addItem('open_when', { color })}></button>
+            ))}
+          </div>
+        )}
         
         {mediaPickerType && (
           <div className="sticker-picker" style={{ gridTemplateColumns: '1fr 1fr', width: '180px', gap: '12px' }}>
@@ -188,28 +200,29 @@ const PinboardCanvas = () => {
           </div>
         )}
         
-        {menuOpen && !showStickerPicker && !showNotePicker && !mediaPickerType && (
+        {menuOpen && !showStickerPicker && !showNotePicker && !showEnvelopePicker && !mediaPickerType && (
           <div className="fab-menu">
             <button onClick={() => setShowNotePicker(true)} title="Add Note"><Type size={20} /></button>
             <button onClick={() => setMediaPickerType('polaroid')} title="Add Photo"><ImageIcon size={20} /></button>
             <button onClick={() => addItem('audio')} title="Add Voice Note"><Mic size={20} /></button>
             <button onClick={() => setMediaPickerType('video')} title="Add Video Clip"><VideoIcon size={20} /></button>
             <button onClick={() => setShowStickerPicker(true)} title="Add Cute Sticker"><Sparkles size={20} /></button>
-            <button onClick={() => addItem('open_when')} title="Add Open When Envelope"><Mail size={20} /></button>
+            <button onClick={() => setShowEnvelopePicker(true)} title="Add Open When Envelope"><Mail size={20} /></button>
             <button onClick={() => addItem('music')} title="Add Spotify/YouTube Music"><Music size={20} /></button>
             <button onClick={() => addItem('bouquet')} title="Add Virtual Bouquet"><Gift size={20} /></button>
           </div>
         )}
         <button className="fab-main" onClick={() => {
-          if (showStickerPicker || showNotePicker || mediaPickerType) {
+          if (showStickerPicker || showNotePicker || showEnvelopePicker || mediaPickerType) {
             setShowStickerPicker(false);
             setShowNotePicker(false);
+            setShowEnvelopePicker(false);
             setMediaPickerType(null);
           } else {
             setMenuOpen(!menuOpen);
           }
         }}>
-          <Plus size={28} className={menuOpen || showStickerPicker || showNotePicker || mediaPickerType ? 'rotate' : ''} />
+          <Plus size={28} className={menuOpen || showStickerPicker || showNotePicker || showEnvelopePicker || mediaPickerType ? 'rotate' : ''} />
         </button>
       </div>
     </div>

@@ -2,7 +2,7 @@ import React, { useRef, useState, useMemo, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import { Mail, MailOpen, X, Edit3 } from 'lucide-react';
 
-const OpenWhenCard = ({ id, defaultPosition, prompt, text, isOpen = false, onUpdatePosition, onUpdateContent, onDelete }) => {
+const OpenWhenCard = ({ id, defaultPosition, prompt, text, isOpen = false, color = 'white', onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [currentPrompt, setCurrentPrompt] = useState(prompt || '');
   const [currentText, setCurrentText] = useState(text || '');
@@ -31,7 +31,7 @@ const OpenWhenCard = ({ id, defaultPosition, prompt, text, isOpen = false, onUpd
     <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="textarea, input, button, .interactive" onStop={handleStop}>
       <div 
         ref={nodeRef} 
-        className={`board-item drag-handle open-when-card ${opened ? 'is-open' : 'is-closed'}`}
+        className={`board-item drag-handle open-when-card ${opened ? 'is-open' : 'is-closed'} color-${color}`}
         style={{ transform: `rotate(${rotation}deg)` }}
       >
         <button className="delete-btn" onClick={() => onDelete && onDelete(id)} title="Delete">
@@ -40,7 +40,6 @@ const OpenWhenCard = ({ id, defaultPosition, prompt, text, isOpen = false, onUpd
 
         {!opened ? (
           <div className="envelope-closed interactive" onClick={toggleOpen}>
-            <Mail size={48} color="#c0a080" />
             <div className="envelope-prompt">
               Open when...
               <input 
