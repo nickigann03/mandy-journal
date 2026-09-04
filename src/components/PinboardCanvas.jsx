@@ -6,11 +6,7 @@ import VideoCard from './VideoCard';
 import StickerCard from './StickerCard';
 import { Plus, Type, Image as ImageIcon, Mic, Video as VideoIcon, Sparkles } from 'lucide-react';
 
-import flowerImg from '../assets/stickers/flower.jpg';
-import starImg from '../assets/stickers/star.jpg';
-import heartImg from '../assets/stickers/heart.jpg';
-
-const stickers = [flowerImg, starImg, heartImg];
+const stickers = ['🌸', '🌺', '🌼', '🌻', '⭐', '✨', '💖', '💝', '🦋', '🎀', '🧸', '🍓', '🍒', '🍑', '🍦', '🎨', '🌈'];
 const noteColors = ['white', 'yellow', 'pink', 'blue', 'green'];
 const noteShapes = ['square', 'circle', 'scallop'];
 
@@ -34,13 +30,13 @@ const PinboardCanvas = () => {
       {
         id: 2,
         type: 'sticker',
-        imageSrc: starImg,
+        emoji: '⭐',
         position: { x: 1500 - 250, y: 100 }
       },
       {
         id: 3,
         type: 'sticker',
-        imageSrc: flowerImg,
+        emoji: '🌸',
         position: { x: 1500 + 150, y: 300 }
       }
     ]);
@@ -93,7 +89,7 @@ const PinboardCanvas = () => {
     } else if (type === 'video') {
       newItem.title = 'Video Note';
     } else if (type === 'sticker') {
-      newItem.imageSrc = stickers[Math.floor(Math.random() * stickers.length)];
+      newItem.emoji = stickers[Math.floor(Math.random() * stickers.length)];
       // Stickers are smaller, let's adjust position slightly so they don't jump too far
       newItem.position.x += 100;
       newItem.position.y += 100;
@@ -123,7 +119,7 @@ const PinboardCanvas = () => {
             return <VideoCard key={item.id} defaultPosition={item.position} title={item.title} />;
           }
           if (item.type === 'sticker') {
-            return <StickerCard key={item.id} defaultPosition={item.position} imageSrc={item.imageSrc} />;
+            return <StickerCard key={item.id} defaultPosition={item.position} emoji={item.emoji} />;
           }
           return null;
         })}
