@@ -52,42 +52,41 @@ const PinboardCanvas = ({ currentUser }) => {
   }, []);
 
   const findEmptyPosition = () => {
-    // Start at center of current viewport
-    const scrollX = wrapperRef.current ? wrapperRef.current.scrollLeft : 0;
-    const scrollY = wrapperRef.current ? wrapperRef.current.scrollTop : 0;
-    const startX = scrollX + (window.innerWidth / 2) - 130;
-    const startY = scrollY + (window.innerHeight / 2) - 150;
-    
-    let x = startX;
-    let y = startY;
-    let radius = 50;
-    let angle = 0;
+    const isMobile = window.innerWidth < 768;
+    const xThreshold = isMobile ? 120 : 250;
+    const yThreshold = isMobile ? 150 : 220;
     
     const isOverlapping = (px, py) => {
-      // Use a smaller overlap threshold for mobile devices
-      const isMobile = window.innerWidth < 768;
-      const xThreshold = isMobile ? 120 : 250;
-      const yThreshold = isMobile ? 150 : 220;
       return items.some(item => {
+        // Exclude stickers from taking up physical space so they can overlap and we don't dodge them
+        if (item.type === 'sticker') return false; 
         const dx = Math.abs(item.position.x - px);
         const dy = Math.abs(item.position.y - py);
         return dx < xThreshold && dy < yThreshold;
       });
     };
 
-    while (isOverlapping(x, y) && radius < 1500) {
-      x = startX + Math.cos(angle) * radius;
-      y = startY + Math.sin(angle) * radius;
-      angle += 0.5;
-      radius += 5;
+    const maxBoardWidth = window.innerWidth;
+    const center = maxBoardWidth / 2 - 130;
+    
+    // Generate organic positions favoring the center first, then spreading outwards
+    const xOptions = [Math.max(0, center)];
+    for (let offset = 80; offset < maxBoardWidth / 2; offset += 80) {
+      xOptions.push(Math.max(0, center - offset));
+      xOptions.push(Math.min(maxBoardWidth - 250, center + offset));
     }
     
-    // Ensure it doesn't spawn completely off-screen or out of bounds
-    const maxBoardWidth = window.innerWidth;
-    x = Math.max(0, Math.min(x, Math.max(maxBoardWidth - 250, 0)));
-    y = Math.max(0, Math.min(y, 3000 - 250));
+    // Scan from top (y=100) to bottom (y=2800)
+    for (let py = 100; py < 2800; py += 100) {
+      for (const px of xOptions) {
+        if (!isOverlapping(px, py)) {
+          return { x: px, y: py };
+        }
+      }
+    }
     
-    return { x, y };
+    // Fallback if somehow completely full
+    return { x: Math.max(0, center), y: 1500 };
   };
 
   const addItem = (type, options = null) => {
