@@ -545,6 +545,10 @@ body {
   background: #ff4757;
   color: white;
 }
+.frameless .delete-btn {
+  top: 8px;
+  right: 8px;
+}
 
 /* Sticker Picker */
 .sticker-picker {
