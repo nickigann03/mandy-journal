@@ -1,6 +1,6 @@
 import React, { useRef, useState, useMemo, useEffect } from 'react';
 import Draggable from 'react-draggable';
-import { MailOpen, X } from 'lucide-react';
+import { MailOpen, Mail, X } from 'lucide-react';
 import CreatorTag from './CreatorTag';
 
 const OpenWhenCard = ({ id, defaultPosition, prompt = "you're sad", text = "", isOpen = false, color = 'white', creatorName, creatorAvatar, onUpdatePosition, onUpdateContent, onDelete }) => {
@@ -54,7 +54,10 @@ const OpenWhenCard = ({ id, defaultPosition, prompt = "you're sad", text = "", i
         ) : (
           <div className="envelope-opened interactive">
             <div className="envelope-header">
-              <button onClick={toggleOpen} className="close-envelope-btn" title="Fold back"><MailOpen size={18} /></button>
+              <button onClick={toggleOpen} className="close-envelope-btn" style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#f5f5f5', padding: '6px 12px', borderRadius: '12px', border: '1px solid #ddd', color: '#555', fontWeight: 'bold', cursor: 'pointer' }} title="Seal Letter">
+                <Mail size={16} />
+                <span style={{ fontSize: '0.85rem' }}>Seal Envelope</span>
+              </button>
               <div className="opened-prompt">Open when {currentPrompt || "..."}</div>
             </div>
             <div className="letter-paper">

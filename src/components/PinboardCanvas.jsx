@@ -103,12 +103,11 @@ const PinboardCanvas = ({ currentUser }) => {
     setTimeout(() => {
       if (wrapperRef.current) {
         wrapperRef.current.scrollTo({
-          top: Math.max(0, position.y - window.innerHeight / 2 + 150),
-          left: Math.max(0, position.x - window.innerWidth / 2 + 150),
+          top: newItem.position.y - window.innerHeight / 2 + 150,
           behavior: 'smooth'
         });
       }
-    }, 150);
+    }, 250);
 
     if (type === 'note') {
       newItem.text = '';
