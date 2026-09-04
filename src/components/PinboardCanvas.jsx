@@ -51,28 +51,28 @@ const PinboardCanvas = ({ currentUser }) => {
     }
   }, []);
 
-  const findEmptyPosition = () => {
-    // Spawn exactly at the center of the current viewport
-    const scrollX = wrapperRef.current ? wrapperRef.current.scrollLeft : 0;
-    const scrollY = wrapperRef.current ? wrapperRef.current.scrollTop : 0;
-    
-    // Add a tiny bit of random scatter so spamming the button doesn't perfectly overlap them
-    const randomOffsetX = (Math.random() - 0.5) * 40;
-    const randomOffsetY = (Math.random() - 0.5) * 40;
-    
-    let x = scrollX + (window.innerWidth / 2) - 130 + randomOffsetX;
-    let y = scrollY + (window.innerHeight / 2) - 150 + randomOffsetY;
-    
-    // Ensure it doesn't spawn completely out of bounds
-    const maxBoardWidth = window.innerWidth;
-    x = Math.max(0, Math.min(x, Math.max(maxBoardWidth - 250, 0)));
-    y = Math.max(0, Math.min(y, 3000 - 250));
-    
-    return { x, y };
+  const [placementMode, setPlacementMode] = useState(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    if (placementMode) {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    }
   };
 
-  const addItem = (type, options = null) => {
-    const position = findEmptyPosition();
+  const handleCanvasClick = (e) => {
+    if (!placementMode) return;
+    
+    // Ignore clicks on buttons/menus that might bubble up
+    if (e.target.closest('.fab-container')) return;
+
+    const rect = wrapperRef.current.getBoundingClientRect();
+    // Offset by roughly half the card size so it drops centered on the cursor
+    const x = Math.max(0, e.clientX - rect.left + wrapperRef.current.scrollLeft - 130);
+    const y = Math.max(0, e.clientY - rect.top + wrapperRef.current.scrollTop - 150);
+
+    const { type, options } = placementMode;
+    const position = { x, y };
     const newItem = { type, position };
     
     if (currentUser) {
@@ -96,9 +96,7 @@ const PinboardCanvas = ({ currentUser }) => {
       newItem.title = 'Video Note';
       newItem.hasFrame = options?.hasFrame ?? true;
     } else if (type === 'sticker') {
-      newItem.imageSrc = options; // For stickers, options is just the image source
-      newItem.position.x += 100;
-      newItem.position.y += 100;
+      newItem.imageSrc = options;
     } else if (type === 'open_when') {
       newItem.color = options?.color || 'white';
     } else if (type === 'bouquet') {
@@ -106,6 +104,11 @@ const PinboardCanvas = ({ currentUser }) => {
     }
 
     addItemMutation(newItem);
+    setPlacementMode(null);
+  };
+
+  const addItem = (type, options = null) => {
+    setPlacementMode({ type, options });
     if (type !== 'sticker' && type !== 'note' && type !== 'polaroid' && type !== 'video' && type !== 'open_when' && type !== 'bouquet') setMenuOpen(false); 
     setShowStickerPicker(false);
     setShowNotePicker(false);
@@ -127,9 +130,31 @@ const PinboardCanvas = ({ currentUser }) => {
   };
 
   return (
-    <div className="pinboard-wrapper" ref={wrapperRef}>
+    <div className={`pinboard-wrapper ${placementMode ? 'placement-mode' : ''}`} ref={wrapperRef} onClick={handleCanvasClick} onMouseMove={handleMouseMove} style={{ cursor: placementMode ? 'crosshair' : 'default' }}>
+      
+      {placementMode && (
+        <div style={{
+          position: 'fixed', top: 20, left: '50%', transform: 'translateX(-50%)',
+          background: 'rgba(0,0,0,0.8)', color: 'white', padding: '12px 24px',
+          borderRadius: '30px', zIndex: 9999, pointerEvents: 'none',
+          display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+        }}>
+          <Sparkles size={18} />
+          <span>Tap anywhere to place your {placementMode.type}</span>
+        </div>
+      )}
+
+      {placementMode && mousePos.x !== 0 && (
+        <div style={{
+          position: 'fixed', left: mousePos.x, top: mousePos.y, 
+          width: '40px', height: '40px', borderRadius: '50%', 
+          background: 'rgba(255,107,129,0.3)', border: '2px dashed #ff4757',
+          transform: 'translate(-50%, -50%)', pointerEvents: 'none', zIndex: 9998
+        }} />
+      )}
+
       <div className="pinboard-canvas">
-        <div className="board-title" style={{ position: 'absolute', top: 20, left: '50%', transform: 'translateX(-50%)', fontSize: '2.5rem', opacity: 0.8 }}>
+        <div className="board-title" style={{ position: 'absolute', top: 20, left: '50%', transform: 'translateX(-50%)', fontSize: '2.5rem', opacity: 0.8, pointerEvents: 'none' }}>
           Dearest Mandy,
         </div>
         {items.map(item => {
