@@ -623,3 +623,44 @@ body {
 .note-option.color-blue { background: #e6f3ff; }
 .note-option.color-green { background: #e8f5e9; }
 
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  /* Smaller FAB on mobile */
+  .fab-container {
+    bottom: 20px;
+    right: 20px;
+    gap: 12px;
+  }
+  .fab-main {
+    width: 56px;
+    height: 56px;
+  }
+  .fab-menu button {
+    width: 44px;
+    height: 44px;
+  }
+  .sticker-picker {
+    bottom: 90px;
+    right: 0;
+  }
+  
+  /* Make cards slightly narrower on very small screens to ensure they fit */
+  .note-card {
+    width: 240px;
+  }
+  .polaroid-card {
+    width: var(--card-width, 220px);
+  }
+  .media-card {
+    width: 240px;
+  }
+  .media-card video {
+    max-height: 140px;
+  }
+
+  /* Make sure the title scales nicely */
+  .board-title {
+    font-size: 2rem !important;
+    top: 12px !important;
+  }
+}
