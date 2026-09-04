@@ -887,8 +887,8 @@ body {
   width: 90%;
   border: 3px solid var(--text-primary);
 }
-.user-setup-modal h2 { margin-bottom: 5px; color: var(--text-primary); font-family: 'Quicksand', sans-serif; font-size: 1.8rem; font-weight: 700; }
-.user-setup-modal p { color: #555; margin-bottom: 20px; font-family: 'Quicksand', sans-serif; font-size: 1.1rem; line-height: 1.2; font-weight: 600; }
+.user-setup-modal h2 { margin-bottom: 5px; color: var(--text-primary); font-family: var(--font-handwriting); font-size: 2.4rem; font-weight: 700; }
+.user-setup-modal p { color: #555; margin-bottom: 20px; font-family: var(--font-handwriting); font-size: 1.4rem; line-height: 1.2; font-weight: 600; }
 .avatar-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -911,9 +911,9 @@ body {
   padding: 10px 15px;
   border: 2px solid var(--text-primary);
   border-radius: 12px;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   margin-bottom: 15px;
-  font-family: 'Quicksand', sans-serif;
+  font-family: var(--font-handwriting);
   font-weight: 600;
   outline: none;
   transition: box-shadow 0.2s;
@@ -927,8 +927,8 @@ body {
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 1.2rem;
-  font-family: 'Quicksand', sans-serif;
+  font-size: 1.4rem;
+  font-family: var(--font-handwriting);
   font-weight: 700;
   cursor: pointer;
   transition: opacity 0.2s, transform 0.2s;
@@ -944,8 +944,8 @@ body {
   color: var(--text-primary);
   border: 2px solid var(--text-primary);
   border-radius: 12px;
-  font-size: 1.1rem;
-  font-family: 'Quicksand', sans-serif;
+  font-size: 1.4rem;
+  font-family: var(--font-handwriting);
   font-weight: 700;
   cursor: pointer;
   margin-top: 10px;
@@ -970,7 +970,7 @@ body {
   box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
 }
 .saved-user-btn .avatar { font-size: 1.8rem; margin-right: 10px; }
-.saved-user-btn .name { font-size: 1.2rem; font-family: 'Quicksand', sans-serif; font-weight: 600; flex-grow: 1; text-align: left; }
+.saved-user-btn .name { font-size: 1.6rem; font-family: var(--font-handwriting); font-weight: 600; flex-grow: 1; text-align: left; }
 .delete-user-btn {
   background: none;
   border: none;
