@@ -34,6 +34,7 @@ const PinboardCanvas = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showStickerPicker, setShowStickerPicker] = useState(false);
   const [showNotePicker, setShowNotePicker] = useState(false);
+  const [mediaPickerType, setMediaPickerType] = useState(null); // 'polaroid' or 'video'
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -80,10 +81,12 @@ const PinboardCanvas = () => {
     } else if (type === 'polaroid') {
       newItem.imageSrc = '';
       newItem.caption = '';
+      newItem.hasFrame = options?.hasFrame ?? true;
     } else if (type === 'audio') {
       newItem.title = 'Voice Note';
     } else if (type === 'video') {
       newItem.title = 'Video Note';
+      newItem.hasFrame = options?.hasFrame ?? true;
     } else if (type === 'sticker') {
       newItem.imageSrc = options; // For stickers, options is just the image source
       newItem.position.x += 100;
@@ -91,9 +94,10 @@ const PinboardCanvas = () => {
     }
 
     addItemMutation(newItem);
-    if (type !== 'sticker' && type !== 'note') setMenuOpen(false); 
+    if (type !== 'sticker' && type !== 'note' && type !== 'polaroid' && type !== 'video') setMenuOpen(false); 
     setShowStickerPicker(false);
     setShowNotePicker(false);
+    setMediaPickerType(null);
   };
 
   const handleUpdatePosition = (id, position) => {
@@ -160,24 +164,38 @@ const PinboardCanvas = () => {
           </div>
         )}
         
-        {menuOpen && !showStickerPicker && !showNotePicker && (
+        {mediaPickerType && (
+          <div className="sticker-picker" style={{ gridTemplateColumns: '1fr 1fr', width: '180px', gap: '12px' }}>
+            <button className="note-option shape-square color-white" onClick={() => addItem(mediaPickerType, { hasFrame: true })} title="With Classic Frame" style={{ padding: '8px' }}>
+              {mediaPickerType === 'polaroid' ? <ImageIcon size={28} color="#555" style={{ margin: '0 auto' }} /> : <VideoIcon size={28} color="#555" style={{ margin: '0 auto' }} />}
+              <div style={{ fontSize: '0.85rem', marginTop: '6px', color: '#555', fontFamily: 'var(--font-ui)', fontWeight: 600 }}>Framed</div>
+            </button>
+            <button className="note-option shape-square color-white" style={{ border: '2px dashed #ccc', padding: '8px' }} onClick={() => addItem(mediaPickerType, { hasFrame: false })} title="Frameless, Edge-to-Edge">
+              {mediaPickerType === 'polaroid' ? <ImageIcon size={28} color="#aaa" style={{ margin: '0 auto' }} /> : <VideoIcon size={28} color="#aaa" style={{ margin: '0 auto' }} />}
+              <div style={{ fontSize: '0.85rem', marginTop: '6px', color: '#888', fontFamily: 'var(--font-ui)', fontWeight: 600 }}>Frameless</div>
+            </button>
+          </div>
+        )}
+        
+        {menuOpen && !showStickerPicker && !showNotePicker && !mediaPickerType && (
           <div className="fab-menu">
             <button onClick={() => setShowNotePicker(true)} title="Add Note"><Type size={20} /></button>
-            <button onClick={() => addItem('polaroid')} title="Add Photo"><ImageIcon size={20} /></button>
+            <button onClick={() => setMediaPickerType('polaroid')} title="Add Photo"><ImageIcon size={20} /></button>
             <button onClick={() => addItem('audio')} title="Add Voice Note"><Mic size={20} /></button>
-            <button onClick={() => addItem('video')} title="Add Video Clip"><VideoIcon size={20} /></button>
+            <button onClick={() => setMediaPickerType('video')} title="Add Video Clip"><VideoIcon size={20} /></button>
             <button onClick={() => setShowStickerPicker(true)} title="Add Cute Sticker"><Sparkles size={20} /></button>
           </div>
         )}
         <button className="fab-main" onClick={() => {
-          if (showStickerPicker || showNotePicker) {
+          if (showStickerPicker || showNotePicker || mediaPickerType) {
             setShowStickerPicker(false);
             setShowNotePicker(false);
+            setMediaPickerType(null);
           } else {
             setMenuOpen(!menuOpen);
           }
         }}>
-          <Plus size={28} className={menuOpen || showStickerPicker || showNotePicker ? 'rotate' : ''} />
+          <Plus size={28} className={menuOpen || showStickerPicker || showNotePicker || mediaPickerType ? 'rotate' : ''} />
         </button>
       </div>
     </div>
