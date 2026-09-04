@@ -20,6 +20,9 @@ export const add = mutation({
     imageSrc: v.optional(v.string()),
     caption: v.optional(v.string()),
     title: v.optional(v.string()),
+    width: v.optional(v.number()),
+    height: v.optional(v.number()),
+    hasFrame: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("items", args);
@@ -44,6 +47,10 @@ export const updateContent = mutation({
     author: v.optional(v.string()),
     caption: v.optional(v.string()),
     title: v.optional(v.string()),
+    imageSrc: v.optional(v.string()),
+    width: v.optional(v.number()),
+    height: v.optional(v.number()),
+    hasFrame: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const { id, ...rest } = args;
