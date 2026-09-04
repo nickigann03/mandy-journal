@@ -74,7 +74,7 @@ const PinboardCanvas = () => {
       radius += 5;
     }
     
-    x = Math.max(0, Math.min(x, 3000 - 300));
+    x = Math.max(0, Math.min(x, window.innerWidth - 300));
     y = Math.max(0, Math.min(y, 3000 - 300));
     
     return { x, y };
