@@ -122,13 +122,13 @@ const PinboardCanvas = () => {
              return <NoteCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} text={item.text} author={item.author} shape={item.shape} color={item.color} hasPushpin={item.hasPushpin} />;
           }
           if (item.type === 'polaroid') {
-            return <PolaroidCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} imageSrc={item.imageSrc} caption={item.caption} />;
+            return <PolaroidCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} imageSrc={item.imageSrc} caption={item.caption} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
           }
           if (item.type === 'audio') {
             return <AudioCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} title={item.title} />;
           }
           if (item.type === 'video') {
-            return <VideoCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} title={item.title} />;
+            return <VideoCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} onDelete={handleDelete} title={item.title} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
           }
           if (item.type === 'sticker') {
             return <StickerCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onDelete={handleDelete} imageSrc={item.imageSrc} />;
