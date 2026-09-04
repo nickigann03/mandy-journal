@@ -5,7 +5,8 @@ Welcome to **Mandy's Virtual Scrapbook**! This is a beautiful, interactive, and 
 ## ✨ Features
 
 - **Infinite Drag-and-Drop Canvas:** A massive vertical corkboard to arrange memories exactly how you want them.
-- **Collaborative Identity:** Choose a cute emoji avatar (🐨, 🦊, 🐰, etc.) and a name. Every item you add gets a tiny customized signature tag at the bottom!
+- **Manual Placement Mode:** When adding new items, enter a "stamp mode" that lets you scroll and tap exactly where you want the item to appear!
+- **Collaborative Identity & Security:** Choose a cute emoji avatar (🐨, 🦊, 🐰, etc.) and a name. Every item you add gets a tiny customized signature tag at the bottom! Plus, users can only delete items that they created.
 - **Rich Media Cards:** 
   - 📝 **Sticky Notes:** Write sweet messages on customizable, colorful sticky notes (with pushpins!).
   - 📸 **Polaroids:** Upload images into beautiful framed polaroids.

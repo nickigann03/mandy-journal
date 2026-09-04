@@ -20,12 +20,12 @@ The app uses a modern React single-page application (SPA) architecture combined 
 ## 💾 State Management
 
 - **Global/Persistent State:** The actual items on the board (their types, positions, colors, content, and creators) are stored in the Convex database. React pulls this state via the `useQuery(api.items.get)` hook.
-- **Local Ephemeral State:** `PinboardCanvas` uses `useState` strictly for UI interactions (e.g., whether the sticker picker menu is open or closed).
-- **Session Identity:** The user's chosen avatar and name are stored locally in the browser's `localStorage` (`mandy_journal_user`), persisting their identity across sessions without requiring a heavy authentication system.
+- **Local Ephemeral State:** `PinboardCanvas` uses `useState` strictly for UI interactions (e.g., whether the sticker picker menu is open, and managing the `placementMode` state for new item drops).
+- **Session Identity & Authorization:** The user's chosen avatar and name are stored locally in the browser's `localStorage` (`mandy_journal_user`). This identity persists across sessions and is used for client-side authorization (e.g., users can only delete items that match their `creatorName`).
 
 ## 🎨 Styling & UX Techniques
 
 - **Infinite Scrolling:** The body overflow is hidden, and `.pinboard-wrapper` manages scrolling across a massive virtual `3000px` high canvas (`.pinboard-canvas`), clamped horizontally to `100vw`.
 - **Z-Index & Interactions:** `react-draggable` handles click-and-drag. Interactive elements (like buttons, textareas, or iframes) within the draggable components use the `cancel` prop so users can interact with them without dragging the whole card.
-- **Auto-Scrolling:** When a user spawns a new item, `PinboardCanvas` dynamically calculates the current viewport scroll position to spawn the item directly in the center of their screen, and then triggers a `smooth` auto-scroll to focus it.
+- **Manual Placement Mode:** When a user selects a new item from the FAB menu, they enter `placementMode`. A crosshair tracks their cursor (on desktop) and a toast overlay appears. The user can scroll freely and click anywhere on the canvas to spawn the item at those exact coordinates, avoiding cluttered auto-spawning.
 - **Blend Modes:** The transparent sticker aesthetic for `.jpg/.png` stickers is achieved using the CSS `mix-blend-mode: multiply;` trick, which naturally subtracts white backgrounds against the canvas.
