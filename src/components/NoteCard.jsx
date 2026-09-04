@@ -63,7 +63,17 @@ const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color =
             onBlur={() => onUpdateContent && onUpdateContent(id, { text: currentText, author: currentAuthor })}
             placeholder="Write a cute note..."
             className="note-textarea"
-            style={{ fontSize: `${fontSize}rem`, fontFamily: fonts[fontIndex] }}
+            style={{ 
+              fontSize: `${fontSize}rem`, 
+              fontFamily: fonts[fontIndex],
+              overflow: 'hidden',
+              resize: 'none',
+              width: '100%',
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              minHeight: '100px'
+            }}
           />
           <input 
             value={currentAuthor} 
@@ -71,7 +81,16 @@ const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color =
             onBlur={() => onUpdateContent && onUpdateContent(id, { text: currentText, author: currentAuthor })}
             placeholder="Sign your name"
             className="author-input"
-            style={{ fontFamily: fonts[fontIndex] }}
+            style={{ 
+              fontFamily: fonts[fontIndex],
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              width: '100%',
+              marginTop: '10px',
+              fontSize: '1.2rem',
+              textAlign: 'right'
+            }}
           />
         </div>
       </div>

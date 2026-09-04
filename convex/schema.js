@@ -35,4 +35,9 @@ export default defineSchema({
     prompt: v.optional(v.string()),
     isOpen: v.optional(v.boolean()),
   }),
+  users: defineTable({
+    name: v.string(),
+    avatar: v.string(),
+    joinedAt: v.optional(v.number()),
+  }),
 });

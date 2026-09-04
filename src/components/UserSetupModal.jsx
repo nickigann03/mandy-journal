@@ -1,45 +1,38 @@
 import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 const avatars = ['🐨', '🦊', '🐰', '🐯', '🐼', '🐸', '🐶', '🐱', '🦋', '🐥', '🦄', '🐧'];
 
 const UserSetupModal = ({ onComplete }) => {
-  const [savedUsers, setSavedUsers] = useState([]);
+  const users = useQuery(api.users.get);
+  const addUser = useMutation(api.users.add);
+
   const [showNewForm, setShowNewForm] = useState(false);
   const [name, setName] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState(avatars[0]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('mandy_journal_saved_users');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setSavedUsers(parsed);
-      if (parsed.length === 0) setShowNewForm(true);
-    } else {
+    if (users !== undefined && users.length === 0) {
       setShowNewForm(true);
     }
-  }, []);
+  }, [users]);
 
   const handleSelectUser = (user) => {
     onComplete(user);
   };
 
-  const handleDeleteUser = (e, indexToDelete) => {
-    e.stopPropagation();
-    const newSaved = savedUsers.filter((_, i) => i !== indexToDelete);
-    setSavedUsers(newSaved);
-    localStorage.setItem('mandy_journal_saved_users', JSON.stringify(newSaved));
-    if (newSaved.length === 0) setShowNewForm(true);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (name.trim()) {
-      const newUser = { name: name.trim(), avatar: selectedAvatar };
-      const newSaved = [...savedUsers, newUser];
-      localStorage.setItem('mandy_journal_saved_users', JSON.stringify(newSaved));
+      const newUser = await addUser({ name: name.trim(), avatar: selectedAvatar });
       onComplete(newUser);
     }
   };
+
+  if (users === undefined) {
+    return null; // Loading state
+  }
 
   return (
     <div className="modal-overlay">
@@ -47,25 +40,18 @@ const UserSetupModal = ({ onComplete }) => {
         <div style={{ fontSize: '2.5rem', marginBottom: '10px', lineHeight: 1 }}>📌</div>
         <h2>Who's adding memories?</h2>
         
-        {!showNewForm && savedUsers.length > 0 ? (
+        {!showNewForm && users.length > 0 ? (
           <div className="saved-users-list">
             <p>Select your profile or create a new one!</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px' }}>
-              {savedUsers.map((user, index) => (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '20px', maxHeight: '200px', overflowY: 'auto' }}>
+              {users.map((user, index) => (
                 <div 
-                  key={index} 
+                  key={user._id || index} 
                   className="saved-user-btn"
                   onClick={() => handleSelectUser(user)}
                 >
                   <span className="avatar">{user.avatar}</span>
                   <span className="name">{user.name}</span>
-                  <button 
-                    className="delete-user-btn" 
-                    onClick={(e) => handleDeleteUser(e, index)}
-                    title="Delete User"
-                  >
-                    ✕
-                  </button>
                 </div>
               ))}
             </div>
@@ -104,7 +90,7 @@ const UserSetupModal = ({ onComplete }) => {
               Join the Board
             </button>
             
-            {savedUsers.length > 0 && (
+            {users.length > 0 && (
               <button type="button" className="cancel-btn" onClick={() => setShowNewForm(false)}>
                 Cancel
               </button>
