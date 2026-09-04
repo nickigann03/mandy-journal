@@ -3,7 +3,9 @@
 :root {
   --bg-color: #f4e8d1;
   --accent-color: #ff9a9e;
+  --text-primary: #333333;
   --font-main: 'Inter', system-ui, sans-serif;
+  --font-ui: 'Quicksand', sans-serif;
   --font-handwriting: 'Caveat', cursive;
   --font-handwriting-2: 'Kalam', cursive;
   --font-handwriting-3: 'Courier New', Courier, monospace;
