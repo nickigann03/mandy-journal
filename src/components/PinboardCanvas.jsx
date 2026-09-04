@@ -22,7 +22,7 @@ import starImg from '../assets/stickers/star.png';
 import heartImg from '../assets/stickers/heart.png';
 
 const stickers = [catImg, sunImg, rainbowImg, dogImg, cactusImg, pizzaImg, flowerImg, starImg, heartImg];
-const bouquetOptions = [bouquetImg, bouquetPinkImg, flowerImg];
+const bouquetOptions = [bouquetImg, bouquetPinkImg];
 const noteColors = ['white', 'yellow', 'pink', 'blue', 'green'];
 const noteShapes = ['square', 'circle', 'scallop'];
 
@@ -226,7 +226,7 @@ const PinboardCanvas = ({ currentUser }) => {
         )}
 
         {showBouquetPicker && (
-          <div className="sticker-picker" style={{ gridTemplateColumns: 'repeat(3, 1fr)', width: '180px' }}>
+          <div className="sticker-picker" style={{ gridTemplateColumns: 'repeat(2, 1fr)', width: '120px' }}>
             {bouquetOptions.map((src, i) => (
               <button key={`bouquet-${i}`} className="sticker-option" style={{ padding: '4px' }} onClick={() => addItem('bouquet', src)}>
                 <img src={src} alt={`bouquet ${i}`} style={{ mixBlendMode: 'multiply' }} />
