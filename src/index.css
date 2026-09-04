@@ -902,6 +902,51 @@ body {
 .start-btn:hover:not(:disabled) { transform: translateY(-2px); opacity: 0.9; }
 .start-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
 
+.cancel-btn {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  color: var(--text-primary);
+  border: 2px solid var(--text-primary);
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-family: 'Patrick Hand', cursive;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+.cancel-btn:hover { background: #f9f9f9; }
+
+.saved-user-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border: 2px solid var(--text-primary);
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.05);
+}
+.saved-user-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+}
+.saved-user-btn .avatar { font-size: 1.8rem; margin-right: 10px; }
+.saved-user-btn .name { font-size: 1.3rem; font-family: 'Patrick Hand', cursive; flex-grow: 1; text-align: left; }
+.delete-user-btn {
+  background: none;
+  border: none;
+  color: #ff6b6b;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+.delete-user-btn:hover { background: #ffe3e3; }
+
 .switch-user-btn {
   position: fixed;
   top: 15px;
