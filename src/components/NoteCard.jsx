@@ -2,10 +2,10 @@ import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
 import { Minus, Plus, Type } from 'lucide-react';
 
-const NoteCard = ({ defaultPosition, text, author, shape = 'square', color = 'white', hasPushpin = false }) => {
+const NoteCard = ({ id, defaultPosition, text, author, shape = 'square', color = 'white', hasPushpin = false, onUpdatePosition, onUpdateContent }) => {
   const nodeRef = useRef(null);
-  const [currentText, setCurrentText] = useState(text);
-  const [currentAuthor, setCurrentAuthor] = useState(author);
+  const [currentText, setCurrentText] = useState(text || '');
+  const [currentAuthor, setCurrentAuthor] = useState(author || '');
   
   const [fontSize, setFontSize] = useState(1.6);
   const [fontIndex, setFontIndex] = useState(0);
@@ -14,8 +14,14 @@ const NoteCard = ({ defaultPosition, text, author, shape = 'square', color = 'wh
   const rotation = useMemo(() => Math.random() * 6 - 3, []);
   const tapeColor = useMemo(() => ['washi-pink', 'washi-blue', 'washi-green'][Math.floor(Math.random() * 3)], []);
 
+  const handleStop = (e, data) => {
+    if (onUpdatePosition) {
+      onUpdatePosition(id, { x: data.x, y: data.y });
+    }
+  };
+
   return (
-    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="textarea, input, button">
+    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="textarea, input, button" onStop={handleStop}>
       <div 
         ref={nodeRef} 
         className={`board-item note-card drag-handle shape-${shape} color-${color}`} 
@@ -37,6 +43,7 @@ const NoteCard = ({ defaultPosition, text, author, shape = 'square', color = 'wh
           <textarea 
             value={currentText} 
             onChange={(e) => setCurrentText(e.target.value)} 
+            onBlur={() => onUpdateContent && onUpdateContent(id, { text: currentText, author: currentAuthor })}
             placeholder="Write a cute note..."
             className="note-textarea"
             style={{ fontSize: `${fontSize}rem`, fontFamily: fonts[fontIndex] }}
@@ -44,6 +51,7 @@ const NoteCard = ({ defaultPosition, text, author, shape = 'square', color = 'wh
           <input 
             value={currentAuthor} 
             onChange={(e) => setCurrentAuthor(e.target.value)} 
+            onBlur={() => onUpdateContent && onUpdateContent(id, { text: currentText, author: currentAuthor })}
             placeholder="Sign your name"
             className="author-input"
             style={{ fontFamily: fonts[fontIndex] }}

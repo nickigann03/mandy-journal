@@ -2,11 +2,11 @@ import React, { useRef, useState, useMemo, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import { Video, Square as StopSquare } from 'lucide-react';
 
-const VideoCard = ({ defaultPosition, title }) => {
+const VideoCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateContent }) => {
   const nodeRef = useRef(null);
   const [videoUrl, setVideoUrl] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [currentTitle, setCurrentTitle] = useState(title);
+  const [currentTitle, setCurrentTitle] = useState(title || 'Video Note');
   const [streamReady, setStreamReady] = useState(false);
   
   const videoPreviewRef = useRef(null);
@@ -65,8 +65,14 @@ const VideoCard = ({ defaultPosition, title }) => {
     }
   }, [videoUrl, streamReady]);
 
+  const handleStop = (e, data) => {
+    if (onUpdatePosition) {
+      onUpdatePosition(id, { x: data.x, y: data.y });
+    }
+  };
+
   return (
-    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, button, video">
+    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, button, video" onStop={handleStop}>
       <div 
         ref={nodeRef} 
         className="board-item polaroid-card drag-handle"
@@ -102,6 +108,7 @@ const VideoCard = ({ defaultPosition, title }) => {
         <input 
           value={currentTitle} 
           onChange={(e) => setCurrentTitle(e.target.value)} 
+          onBlur={() => onUpdateContent && onUpdateContent(id, { title: currentTitle })}
           placeholder="Add a cute caption..."
           className="caption-input"
         />

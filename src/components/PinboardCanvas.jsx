@@ -21,37 +21,19 @@ const stickers = [catImg, sunImg, rainbowImg, coffeeImg, dogImg, cactusImg, pizz
 const noteColors = ['white', 'yellow', 'pink', 'blue', 'green'];
 const noteShapes = ['square', 'circle', 'scallop'];
 
+import { useQuery, useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+
 const PinboardCanvas = () => {
-  const [items, setItems] = useState([]);
+  const items = useQuery(api.items.get) || [];
+  const addItemMutation = useMutation(api.items.add);
+  const updatePosition = useMutation(api.items.updatePosition);
+  const updateContentMutation = useMutation(api.items.updateContent);
+  
   const [menuOpen, setMenuOpen] = useState(false);
   const wrapperRef = useRef(null);
 
   useEffect(() => {
-    setItems([
-      { 
-        id: 1, 
-        type: 'note', 
-        text: 'Welcome to your premium digital pinboard!\n\nClick the + button to add voice notes, videos, photos, and text.\n\nYou can drag everything around and edit this text directly!', 
-        author: 'Antigravity', 
-        position: { x: 1500 - 130, y: 150 },
-        shape: 'scallop',
-        color: 'pink',
-        hasPushpin: true
-      },
-      {
-        id: 2,
-        type: 'sticker',
-        imageSrc: starImg,
-        position: { x: 1500 - 250, y: 100 }
-      },
-      {
-        id: 3,
-        type: 'sticker',
-        imageSrc: flowerImg,
-        position: { x: 1500 + 150, y: 300 }
-      }
-    ]);
-    
     if (wrapperRef.current) {
       wrapperRef.current.scrollTop = 0;
       wrapperRef.current.scrollLeft = 1500 - window.innerWidth / 2;
@@ -84,14 +66,14 @@ const PinboardCanvas = () => {
 
   const addItem = (type) => {
     const position = findEmptyPosition();
-    const newItem = { id: Date.now(), type, position };
+    const newItem = { type, position };
 
     if (type === 'note') {
       newItem.text = '';
       newItem.author = '';
       newItem.shape = noteShapes[Math.floor(Math.random() * noteShapes.length)];
       newItem.color = noteColors[Math.floor(Math.random() * noteColors.length)];
-      newItem.hasPushpin = Math.random() > 0.5; // 50% chance for pushpin instead of tape
+      newItem.hasPushpin = Math.random() > 0.5;
     } else if (type === 'polaroid') {
       newItem.imageSrc = '';
       newItem.caption = '';
@@ -101,13 +83,20 @@ const PinboardCanvas = () => {
       newItem.title = 'Video Note';
     } else if (type === 'sticker') {
       newItem.imageSrc = stickers[Math.floor(Math.random() * stickers.length)];
-      // Stickers are smaller, let's adjust position slightly so they don't jump too far
       newItem.position.x += 100;
       newItem.position.y += 100;
     }
 
-    setItems([...items, newItem]);
+    addItemMutation(newItem);
     setMenuOpen(false);
+  };
+
+  const handleUpdatePosition = (id, position) => {
+    updatePosition({ id, position });
+  };
+
+  const handleUpdateContent = (id, updates) => {
+    updateContentMutation({ id, ...updates });
   };
 
   return (
@@ -118,19 +107,19 @@ const PinboardCanvas = () => {
         </div>
         {items.map(item => {
           if (item.type === 'note') {
-             return <NoteCard key={item.id} defaultPosition={item.position} text={item.text} author={item.author} shape={item.shape} color={item.color} hasPushpin={item.hasPushpin} />;
+             return <NoteCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} text={item.text} author={item.author} shape={item.shape} color={item.color} hasPushpin={item.hasPushpin} />;
           }
           if (item.type === 'polaroid') {
-            return <PolaroidCard key={item.id} defaultPosition={item.position} imageSrc={item.imageSrc} caption={item.caption} />;
+            return <PolaroidCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} imageSrc={item.imageSrc} caption={item.caption} />;
           }
           if (item.type === 'audio') {
-            return <AudioCard key={item.id} defaultPosition={item.position} title={item.title} />;
+            return <AudioCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} title={item.title} />;
           }
           if (item.type === 'video') {
-            return <VideoCard key={item.id} defaultPosition={item.position} title={item.title} />;
+            return <VideoCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} onUpdateContent={handleUpdateContent} title={item.title} />;
           }
           if (item.type === 'sticker') {
-            return <StickerCard key={item.id} defaultPosition={item.position} imageSrc={item.imageSrc} />;
+            return <StickerCard key={item._id} id={item._id} defaultPosition={item.position} onUpdatePosition={handleUpdatePosition} imageSrc={item.imageSrc} />;
           }
           return null;
         })}

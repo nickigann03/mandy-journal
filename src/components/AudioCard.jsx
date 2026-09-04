@@ -2,12 +2,12 @@ import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
 import { Play, Square, Disc, Mic, Square as StopSquare } from 'lucide-react';
 
-const AudioCard = ({ defaultPosition, title }) => {
+const AudioCard = ({ id, defaultPosition, title, onUpdatePosition, onUpdateContent }) => {
   const nodeRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [currentTitle, setCurrentTitle] = useState(title);
+  const [currentTitle, setCurrentTitle] = useState(title || 'Voice Note');
   
   const audioRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -59,8 +59,14 @@ const AudioCard = ({ defaultPosition, title }) => {
     setPlaying(!playing);
   };
 
+  const handleStop = (e, data) => {
+    if (onUpdatePosition) {
+      onUpdatePosition(id, { x: data.x, y: data.y });
+    }
+  };
+
   return (
-    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, button">
+    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, button" onStop={handleStop}>
       <div 
         ref={nodeRef} 
         className="board-item media-card drag-handle"
@@ -72,6 +78,7 @@ const AudioCard = ({ defaultPosition, title }) => {
           <input 
             value={currentTitle} 
             onChange={(e) => setCurrentTitle(e.target.value)} 
+            onBlur={() => onUpdateContent && onUpdateContent(id, { title: currentTitle })}
             placeholder="Audio title..."
             className="media-title-input"
           />

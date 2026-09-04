@@ -2,25 +2,32 @@ import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
 import { Upload } from 'lucide-react';
 
-const PolaroidCard = ({ defaultPosition, imageSrc, caption }) => {
+const PolaroidCard = ({ id, defaultPosition, imageSrc, caption, onUpdatePosition, onUpdateContent }) => {
   const nodeRef = useRef(null);
-  const [currentImage, setCurrentImage] = useState(imageSrc);
-  const [currentCaption, setCurrentCaption] = useState(caption);
+  const [currentImage, setCurrentImage] = useState(imageSrc || '');
+  const [currentCaption, setCurrentCaption] = useState(caption || '');
   const fileInputRef = useRef(null);
   
   const rotation = useMemo(() => Math.random() * 6 - 3, []);
   const tapeColor = useMemo(() => ['washi-pink', 'washi-blue', 'washi-green'][Math.floor(Math.random() * 3)], []);
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const url = URL.createObjectURL(file);
+      const url = URL.createObjectURL(file); // For local preview/demo. Real app would upload to Convex Storage.
       setCurrentImage(url);
+      if (onUpdateContent) onUpdateContent(id, { imageSrc: url, caption: currentCaption });
+    }
+  };
+
+  const handleStop = (e, data) => {
+    if (onUpdatePosition) {
+      onUpdatePosition(id, { x: data.x, y: data.y });
     }
   };
 
   return (
-    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, button, .photo-container">
+    <Draggable nodeRef={nodeRef} defaultPosition={defaultPosition} bounds="parent" cancel="input, button, .photo-container" onStop={handleStop}>
       <div 
         ref={nodeRef} 
         className="board-item polaroid-card drag-handle"
@@ -45,7 +52,8 @@ const PolaroidCard = ({ defaultPosition, imageSrc, caption }) => {
         </div>
         <input 
           value={currentCaption} 
-          onChange={(e) => setCurrentCaption(e.target.value)} 
+          onChange={(e) => setCurrentCaption(e.target.value)}
+          onBlur={() => onUpdateContent && onUpdateContent(id, { imageSrc: currentImage, caption: currentCaption })}
           placeholder="Add a cute caption..."
           className="caption-input"
         />
