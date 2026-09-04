@@ -837,10 +837,11 @@ body {
   
   /* Scale down switch user button */
   .switch-user-btn {
-    top: 10px;
-    left: 10px;
+    bottom: 20px;
+    left: 20px;
     padding: 4px 10px 4px 6px;
     font-size: 1rem;
+    top: auto;
   }
   .switch-user-btn .avatar {
     width: 28px;
@@ -995,8 +996,8 @@ body {
 
 .switch-user-btn {
   position: fixed;
-  top: 15px;
-  left: 15px;
+  bottom: 20px;
+  left: 20px;
   background: white;
   border: 2px solid var(--text-primary);
   border-radius: 25px;

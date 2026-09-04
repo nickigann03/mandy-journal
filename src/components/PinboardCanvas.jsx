@@ -49,8 +49,9 @@ const PinboardCanvas = ({ currentUser }) => {
 
   useEffect(() => {
     if (wrapperRef.current) {
+      const center = Math.max(1400, window.innerWidth) / 2;
       wrapperRef.current.scrollTop = 0;
-      wrapperRef.current.scrollLeft = 1500 - window.innerWidth / 2;
+      wrapperRef.current.scrollLeft = center - window.innerWidth / 2;
     }
   }, []);
 
