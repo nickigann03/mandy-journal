@@ -2,15 +2,20 @@ import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
 import { Play, Square, Disc, Mic, Square as StopSquare, X, Palette } from 'lucide-react';
 import CreatorTag from './CreatorTag';
+import { useMutation } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 
-const AudioCard = ({ id, defaultPosition, title, creatorName, creatorAvatar, color = 'white', onUpdatePosition, onUpdateContent, onDelete }) => {
+const AudioCard = ({ id, defaultPosition, title, url, creatorName, creatorAvatar, color = 'white', onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [playing, setPlaying] = useState(false);
-  const [audioUrl, setAudioUrl] = useState(null);
+  const [audioUrl, setAudioUrl] = useState(url || null);
   const [isRecording, setIsRecording] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(title || 'Voice Note');
   const [currentColor, setCurrentColor] = useState(color);
   const [showPalette, setShowPalette] = useState(false);
+
+  const generateUploadUrl = useMutation(api.items.generateUploadUrl);
+  const getUrlMutation = useMutation(api.items.getUrlMutation);
   
   const colors = ['white', 'yellow', 'pink', 'blue', 'green'];
   
@@ -32,10 +37,28 @@ const AudioCard = ({ id, defaultPosition, title, creatorName, creatorAvatar, col
         if (e.data.size > 0) chunksRef.current.push(e.data);
       };
 
-      mediaRecorder.onstop = () => {
+      mediaRecorder.onstop = async () => {
         const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
-        const url = URL.createObjectURL(blob);
-        setAudioUrl(url);
+        
+        try {
+          const postUrl = await generateUploadUrl();
+          const result = await fetch(postUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': blob.type },
+            body: blob,
+          });
+          const { storageId } = await result.json();
+          const url = await getUrlMutation({ storageId });
+          
+          setAudioUrl(url);
+          if (onUpdateContent) onUpdateContent(id, { url });
+        } catch (error) {
+          console.error("Upload failed", error);
+          const localUrl = URL.createObjectURL(blob);
+          setAudioUrl(localUrl);
+          if (onUpdateContent) onUpdateContent(id, { url: localUrl });
+        }
+        
         stream.getTracks().forEach(track => track.stop()); // Stop mic
       };
 

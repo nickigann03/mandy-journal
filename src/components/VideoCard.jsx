@@ -2,14 +2,19 @@ import React, { useRef, useState, useMemo, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import { Video, Square as StopSquare, X, Frame } from 'lucide-react';
 import CreatorTag from './CreatorTag';
+import { useMutation } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 
-const VideoCard = ({ id, defaultPosition, title, creatorName, creatorAvatar, width = 240, height = 300, hasFrame = true, onUpdatePosition, onUpdateContent, onDelete }) => {
+const VideoCard = ({ id, defaultPosition, title, url, creatorName, creatorAvatar, width = 240, height = 300, hasFrame = true, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
-  const [videoUrl, setVideoUrl] = useState(null);
+  const [videoUrl, setVideoUrl] = useState(url || null);
   const [isRecording, setIsRecording] = useState(false);
   const [currentTitle, setCurrentTitle] = useState(title || 'Video Note');
   const [streamReady, setStreamReady] = useState(false);
   const [frameEnabled, setFrameEnabled] = useState(hasFrame);
+
+  const generateUploadUrl = useMutation(api.items.generateUploadUrl);
+  const getUrlMutation = useMutation(api.items.getUrlMutation);
   
   // Resizing state
   const [size, setSize] = useState({ width, height });
@@ -49,10 +54,28 @@ const VideoCard = ({ id, defaultPosition, title, creatorName, creatorAvatar, wid
       if (e.data.size > 0) chunksRef.current.push(e.data);
     };
 
-    mediaRecorder.onstop = () => {
+    mediaRecorder.onstop = async () => {
       const blob = new Blob(chunksRef.current, { type: 'video/webm' });
-      const url = URL.createObjectURL(blob);
-      setVideoUrl(url);
+      
+      try {
+        const postUrl = await generateUploadUrl();
+        const result = await fetch(postUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': blob.type },
+          body: blob,
+        });
+        const { storageId } = await result.json();
+        const finalUrl = await getUrlMutation({ storageId });
+        
+        setVideoUrl(finalUrl);
+        if (onUpdateContent) onUpdateContent(id, { imageSrc: finalUrl }); // Reusing imageSrc or url
+      } catch (error) {
+        console.error("Upload failed", error);
+        const localUrl = URL.createObjectURL(blob);
+        setVideoUrl(localUrl);
+        if (onUpdateContent) onUpdateContent(id, { imageSrc: localUrl });
+      }
+      
       stream.getTracks().forEach(track => track.stop());
     };
 

@@ -2,7 +2,8 @@ import React, { useRef, useState, useMemo } from 'react';
 import Draggable from 'react-draggable';
 import { Upload, X, Maximize, Frame } from 'lucide-react';
 import CreatorTag from './CreatorTag';
-
+import { useMutation } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 const PolaroidCard = ({ id, defaultPosition, imageSrc, caption, creatorName, creatorAvatar, width = 240, height = 300, hasFrame = true, onUpdatePosition, onUpdateContent, onDelete }) => {
   const nodeRef = useRef(null);
   const [currentImage, setCurrentImage] = useState(imageSrc || '');
@@ -19,12 +20,32 @@ const PolaroidCard = ({ id, defaultPosition, imageSrc, caption, creatorName, cre
   const rotation = useMemo(() => Math.random() * 6 - 3, []);
   const tapeColor = useMemo(() => ['washi-pink', 'washi-blue', 'washi-green'][Math.floor(Math.random() * 3)], []);
 
+  const generateUploadUrl = useMutation(api.items.generateUploadUrl);
+  const getUrlMutation = useMutation(api.items.getUrlMutation);
+
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const url = URL.createObjectURL(file); // For local preview/demo. Real app would upload to Convex Storage.
-      setCurrentImage(url);
-      if (onUpdateContent) onUpdateContent(id, { imageSrc: url, caption: currentCaption });
+      try {
+        const postUrl = await generateUploadUrl();
+        const result = await fetch(postUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': file.type },
+          body: file,
+        });
+        const { storageId } = await result.json();
+        
+        const url = await getUrlMutation({ storageId });
+        
+        setCurrentImage(url);
+        if (onUpdateContent) onUpdateContent(id, { imageSrc: url, caption: currentCaption });
+      } catch (error) {
+        console.error("Upload failed", error);
+        // Fallback for visual testing if backend fails
+        const localUrl = URL.createObjectURL(file);
+        setCurrentImage(localUrl);
+        if (onUpdateContent) onUpdateContent(id, { imageSrc: localUrl, caption: currentCaption });
+      }
     }
   };
 

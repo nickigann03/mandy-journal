@@ -207,10 +207,10 @@ const PinboardCanvas = ({ currentUser }) => {
             return <PolaroidCard key={item._id} {...commonProps} onUpdateContent={handleUpdateContent} imageSrc={item.imageSrc} caption={item.caption} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
           }
           if (item.type === 'audio') {
-            return <AudioCard key={item._id} {...commonProps} onUpdateContent={handleUpdateContent} title={item.title} />;
+            return <AudioCard key={item._id} {...commonProps} onUpdateContent={handleUpdateContent} title={item.title} url={item.url} />;
           }
           if (item.type === 'video') {
-            return <VideoCard key={item._id} {...commonProps} onUpdateContent={handleUpdateContent} title={item.title} hasFrame={item.hasFrame} width={item.width} height={item.height} />;
+            return <VideoCard key={item._id} {...commonProps} onUpdateContent={handleUpdateContent} title={item.title} hasFrame={item.hasFrame} width={item.width} height={item.height} url={item.imageSrc} />;
           }
           if (item.type === 'sticker') {
             return <StickerCard key={item._id} {...commonProps} imageSrc={item.imageSrc} />;
